@@ -18,18 +18,21 @@ local timer = mjrequire "common/timer"
 local uiCommon = mjrequire "mainThread/ui/uiCommon/uiCommon"
 local uiStandardButton = mjrequire "mainThread/ui/uiCommon/uiStandardButton"
 local eventManager = mjrequire "mainThread/eventManager"
+local mob = mjrequire "common/mob/mob"
+local typeMaps = mjrequire "common/typeMaps"
 
 -- Local state
-local mainView = nil
-local mainViewWidth = 1140
-local mainViewHeight = 640
-local mainViewSize = vec2(mainViewWidth, mainViewHeight)
+local backgroundWidth = 1140
+local backgroundHeight = 640
+local backgroundSize = vec2(backgroundWidth, backgroundHeight)
 
-local mainContentView = nil
+local buttonBoxWidth = 80
+local buttonBoxHeight = backgroundHeight - 80.0
+local buttonBoxSize = vec2(buttonBoxWidth, buttonBoxHeight)
 
-local tabHeight = mainViewHeight - 80.0
-local tabWidth = 180.0
-local tabSize = vec2(tabWidth, tabHeight)
+local buttonWidth = 180
+local buttonHeight = 40
+local buttonSize = vec2(buttonWidth, buttonHeight)
 
 -- Called when the UI is ready to be geneated
 function cheatUI:init(gameUI)
@@ -37,20 +40,28 @@ function cheatUI:init(gameUI)
 
 	-- Main View
 	self.mainView = View.new(gameUI.view)
-	self.mainView.hidden = false
+	self.mainView.size = backgroundSize
 	self.mainView.relativePosition = ViewPosition(MJPositionCenter, MJPositionCenter)
-	self.mainView.size = mainViewSize
 
-	-- Main Content View
-	mainContentView = ModelView.new(self.mainView )
-    mainContentView:setModel(model:modelIndexForName("ui_bg_lg_16x9"))
-    local scaleToUse = mainViewHeight * 0.5
-    mainContentView.scale3D = vec3(scaleToUse,scaleToUse,scaleToUse)
-    mainContentView.relativePosition = ViewPosition(MJPositionCenter, MJPositionTop)
-    mainContentView.size = mainViewSize
+	-- Background view
+	local backgroundView = ModelView.new(self.mainView )
+	backgroundView:setModel(model:modelIndexForName("ui_bg_lg_16x9"))
+	local scaleToUse = backgroundHeight
+    backgroundView.scale3D = vec3(scaleToUse,scaleToUse,scaleToUse)
+	backgroundView.relativePosition = ViewPosition(MJPositionCenter, MJPositionCenter)
+	backgroundView.size = backgroundSize
 
-	-- Clost Button
-    local closeButton = uiStandardButton:create(mainContentView, vec2(50,50), uiStandardButton.types.markerLike)
+	-- Button Box
+	local buttonBox = ModelView.new(backgroundView )
+    buttonBox:setModel(model:modelIndexForName("ui_inset_lg_2x3"))
+    local scaleToUse = buttonBoxHeight * 0.5
+    buttonBox.scale3D = vec3(scaleToUse,scaleToUse,scaleToUse)
+	buttonBox.baseOffset = vec3(300, 0, 0)
+    buttonBox.relativePosition = ViewPosition(MJPositionOuterLeft, MJPositionCenter)
+    buttonBox.size = buttonBoxSize
+
+	-- Close Button
+    local closeButton = uiStandardButton:create(backgroundView, vec2(50,50), uiStandardButton.types.markerLike)
     closeButton.relativePosition = ViewPosition(MJPositionInnerRight, MJPositionAbove)
     closeButton.baseOffset = vec3(30, -20, 0)
     uiStandardButton:setIconModel(closeButton, "icon_cross")
@@ -58,18 +69,27 @@ function cheatUI:init(gameUI)
 		self.mainView.hidden = true
     end)
 
-	-- Spawn Entities View
-	local spawnEntityView = View.new(self.mainView)
-    spawnEntityView.size = tabSize
-    spawnEntityView.baseOffset = vec3(0,0, 4)
+	local buttonSpacing = 60
+	local buttonIndex = 1
 
-	local testButton = uiStandardButton:create(spawnEntityView, vec2(180.0, 40))
-    testButton.relativePosition = ViewPosition(MJPositionCenter, MJPositionTop)
-    testButton.baseOffset = vec3(0,-10, 0)
-    uiStandardButton:setText(testButton, "WOW")
-	uiStandardButton:setClickFunction(testButton, function()
-		self.mainView.hidden = true
-    end)
+	-- Add Spawn Buttons
+	for i, mobType in ipairs(mob.validTypes) do
+		local entityIdentifier = mobType.key
+		local entityName = entityIdentifier
+
+		local spawnButton = uiStandardButton:create(buttonBox, buttonSize)
+		spawnButton.relativePosition = ViewPosition(MJPositionCenter, MJPositionTop)
+
+		local offset = -1 * buttonSpacing * buttonIndex
+		
+
+		spawnButton.baseOffset = vec3(0, offset, 5) -- Top padding
+		uiStandardButton:setText(spawnButton, entityName)
+		uiStandardButton:setClickFunction(spawnButton, function()
+			spawn(entityIdentifier)
+		end)
+		buttonIndex = buttonIndex + 1
+	end
 
 	mj:log("Cheat UI Initialized.")
 end
