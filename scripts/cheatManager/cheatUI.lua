@@ -6,7 +6,7 @@
 local cheatUI = {
 	gameUI = nil,
 	name = "cheatUI",
-	mainView = nil,
+	view = nil,
 }
 
 -- Requires
@@ -31,16 +31,16 @@ local buttonHeight = 40
 local buttonSize = vec2(buttonWidth, buttonHeight)
 
 -- Called when the UI is ready to be geneated
-function cheatUI:init(gameUI)
+function cheatUI:initGameElement(gameUI)
 	mj:log("Initializing Cheat UI...")
 
 	-- Main View
-	self.mainView = View.new(gameUI.view)
-	self.mainView.size = backgroundSize
-	self.mainView.relativePosition = ViewPosition(MJPositionCenter, MJPositionCenter)
+	self.view = View.new(gameUI.view)
+	self.view.size = backgroundSize
+	self.view.relativePosition = ViewPosition(MJPositionCenter, MJPositionCenter)
 
 	-- Background view
-	local backgroundView = ModelView.new(self.mainView )
+	local backgroundView = ModelView.new(self.view )
 	backgroundView:setModel(model:modelIndexForName("ui_bg_lg_16x9"))
 	local scaleToUse = backgroundHeight
     backgroundView.scale3D = vec3(scaleToUse,scaleToUse,scaleToUse)
@@ -62,7 +62,7 @@ function cheatUI:init(gameUI)
     closeButton.baseOffset = vec3(30, -20, 0)
     uiStandardButton:setIconModel(closeButton, "icon_cross")
     uiStandardButton:setClickFunction(closeButton, function()
-		self.mainView.hidden = true
+		self.view.hidden = true
     end)
 
 	local buttonSpacing = 60
@@ -91,7 +91,7 @@ function cheatUI:init(gameUI)
 end
 
 -- Called every frame
-function cheatUI:update(gameUI)
+function cheatUI:updateGameElement(gameUI)
 	-- Do nothing
 end
 

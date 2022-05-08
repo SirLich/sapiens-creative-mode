@@ -8,13 +8,15 @@ local cheatManager = {}
 -- Includes
 local uiManager = mjrequire "erectus/ui/uiManager"
 local cheatUI = mjrequire "cheatManager/cheatUI"
+local testActionUI = mjrequire "cheatManager/actions/testActionUI"
 
 -- CheatManager entrypoint, called by shadowing 'controller.lua' in the main thread.
 function cheatManager:init()
 	mj:log("Initializing Cheat Manager Mod.")
 	
 	-- Register the cheatUI to the UIManager
-	uiManager.registerGameView(cheatUI);
+	uiManager:registerGameElement(cheatUI);
+	uiManager:registerActionElement(testActionUI);
 
 	mj:log("Cheat Manager Mod Initialized.")
 end
