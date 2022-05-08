@@ -14,12 +14,8 @@ local mjm = mjrequire "common/mjm"
 local vec3 = mjm.vec3
 local vec2 = mjm.vec2
 local model = mjrequire "common/model"
-local timer = mjrequire "common/timer"
-local uiCommon = mjrequire "mainThread/ui/uiCommon/uiCommon"
 local uiStandardButton = mjrequire "mainThread/ui/uiCommon/uiStandardButton"
-local eventManager = mjrequire "mainThread/eventManager"
 local mob = mjrequire "common/mob/mob"
-local typeMaps = mjrequire "common/typeMaps"
 
 -- Local state
 local backgroundWidth = 1140
