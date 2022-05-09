@@ -17,6 +17,7 @@ function cheatManager:init()
 	-- Register the cheatUI to the UIManager
 	uiManager:registerGameElement(cheatUI);
 	uiManager:registerActionElement(testActionUI);
+	uiManager:registerActionElement(testActionUI);
 
 	mj:log("Cheat Manager Mod Initialized.")
 end
