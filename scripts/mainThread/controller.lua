@@ -1,4 +1,4 @@
---- Entrypoint for the cheatManager.
+--- Entrypoint for the creativeMode.
 -- We need to shadow the controller file to hook up the lifecycle events.
 -- @author SirLich
 
@@ -7,8 +7,8 @@ local mod = {
 }
 
 function mod:onload(controller)
-	local cheatManager = mjrequire "cheatManager/cheatManager"
-	cheatManager:init()
+	local creativeMode = mjrequire "creativeMode/creativeMode"
+	creativeMode:init()
 end
 
 return mod

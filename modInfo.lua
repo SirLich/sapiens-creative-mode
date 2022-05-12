@@ -1,7 +1,7 @@
 local modInfo = {
-    name = "Cheat Manager",
-    description = "A cheat manager for Sapiens",
-    version = "1.0.0",
+    name = "CreativeMode",
+    description = "Bringing CreativeMode to Sapiens.",
+    version = "0.0.1", -- Pre-alpha
     type = "app",
     developer = "SirLich"
 }
