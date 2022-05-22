@@ -6,7 +6,7 @@ Introducing Creative Mode to the Sapiens experience! Fly as high as far as you l
 
 ## Cheat Menu
 
-Shows up on world load. Will be moved into some other location soon, probably with a keybinding.
+Toggle with `.`. This is mostly a test and shouldn't be considered final. 
 
 ![](cheat_menu.png)
 
