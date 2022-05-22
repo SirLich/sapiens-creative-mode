@@ -7,6 +7,7 @@ local creativeMode = {}
 -- Includes
 local uiManager = mjrequire "hammerstone/ui/uiManager"
 local cheatUI = mjrequire "creativeMode/cheatUI"
+local cheats = mjrequire "creativeMode/cheats"
 
 -- CreativeMode entrypoint, called by shadowing 'controller.lua' in the main thread.
 function creativeMode:init()
