@@ -4,13 +4,20 @@
 -- Module setup
 local creativeMode = {}
 
--- Includes
-local uiManager = mjrequire "hammerstone/ui/uiManager"
-local cheatUI = mjrequire "creativeMode/cheatUI"
-local cheats = mjrequire "creativeMode/cheats"
-local inputManager = mjrequire "hammerstone/input/inputManager"
+-- Sapiens
 local keyCodes = mjrequire "mainThread/keyMapping".keyCodes
+local timer = mjrequire "common/timer"
+
+-- Hammerstone
 local localeManager = mjrequire "hammerstone/locale/localeManager"
+local inputManager = mjrequire "hammerstone/input/inputManager"
+local uiManager = mjrequire "hammerstone/ui/uiManager"
+local saveState = mjrequire "hammerstone/state/saveState"
+
+-- Creative Mode
+local cheat = mjrequire "creativeMode/cheat" -- Not really used, but we need to import so the global is exposed.
+local cheatUI = mjrequire "creativeMode/cheatUI"
+
 
 -- CreativeMode entrypoint, called by shadowing 'controller.lua' in the main thread.
 function creativeMode:init()
@@ -21,7 +28,6 @@ function creativeMode:init()
 
     inputManager:addGroup("creativeMode")
     inputManager:addMapping("creativeMode", "toggleMenu", keyCodes.period, nil)
-    inputManager:addMapping("creativeMode", "toggleMenu2", keyCodes.kp_period, nil)
 
     inputManager:addKeyChangedCallback("creativeMode", "toggleMenu", function (isDown, isRepeat)
         if cheatUI.view then
@@ -35,7 +41,17 @@ function creativeMode:init()
     local testActionUI = mjrequire "creativeMode/actions/testActionUI"
     uiManager:registerActionElement(testActionUI);
 
+    creativeMode:reapplySaveState()
+end
 
+function creativeMode:reapplySaveState()
+    -- TODO: Doing timers like this is a stupid way to handle ordering.
+    timer:addCallbackTimer(2, function()
+        -- Restore state
+        if saveState:get("instantBuild", false) then
+            cheat:EnableInstantBuild()
+        end
+    end)
 end
 
 -- Module return

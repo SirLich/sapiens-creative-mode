@@ -11,8 +11,9 @@ local skill = mjrequire "common/skill"
 local constructUIHelper = mjrequire "mainThread/ui/constructableUIHelper"
 
 -- Hammerstone
-local hammerstone = mjrequire "hammerstone/hammerstone"
+local gameState = mjrequire "hammerstone/state/gameState"
 local logger = mjrequire "hammerstone/logging"
+local saveState = mjrequire "hammerstone/state/saveState"
 
 function cheat:UnlockSkill(skillName)
 	--- Unlocks a skill by name
@@ -20,7 +21,7 @@ function cheat:UnlockSkill(skillName)
 	-- @return nil
 
 	local skillTypeIndex = typeMaps:keyToIndex(skillName, skill.validTypes)
-	local tribeID = hammerstone.world:getTribeID()
+	local tribeID = gameState.world:getTribeID()
 
 	logger:log("Unlocking Skill: " .. skillName .. " (" .. skillTypeIndex .. ")" .. " for tribe: " .. tribeID)
 
@@ -56,7 +57,8 @@ function cheat:EnableInstantBuild()
 	--- Enables instant build
 	-- @return nil
 
-	completeCheat()
+	saveState:set("instantBuild", true)
+	completeCheat() -- Sapiens Global
 	constructUIHelper.instantBuild = true
 end
 
