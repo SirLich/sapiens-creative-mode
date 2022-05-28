@@ -34,10 +34,18 @@ function creativeMode:init()
             cheatUI.view.hidden = not cheatUI.view.hidden
         end
     end)
-
+    
     -- Register the cheatUI to the UIManager
     uiManager:registerGameElement(cheatUI);
 
+    uiManager:registerManageElement({
+        name = "Creative Mode Cheats",
+        icon = "icon_configure",
+        onClick = function()
+            cheatUI.view.hidden = false
+        end,
+    })
+    
     local testActionUI = mjrequire "creativeMode/actions/testActionUI"
     uiManager:registerActionElement(testActionUI);
 
