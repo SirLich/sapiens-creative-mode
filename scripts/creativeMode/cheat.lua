@@ -26,7 +26,6 @@ function cheat:UnlockSkill(skillName)
 	logger:log("Unlocking Skill: " .. skillName .. " (" .. skillTypeIndex .. ")" .. " for tribe: " .. tribeID)
 
 	local paramTable = {
-		test = "TEST 3432432423",
 		tribeID = tribeID,
 		skillTypeIndex = skillTypeIndex
 	}

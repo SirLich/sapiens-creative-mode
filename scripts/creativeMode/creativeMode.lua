@@ -1,4 +1,5 @@
---- Mod entry point for the CreativeMode Mod. 
+--- Mod entry point for the CreativeMode Mod.
+-- Can be considered as the 'main' file of the mod.
 -- @author SirLich
 
 -- Module setup
@@ -39,11 +40,13 @@ function creativeMode:init()
     uiManager:registerGameElement(cheatUI);
 
     uiManager:registerManageElement({
-        name = "Creative Mode Cheats",
+        name = "Creative Mode",
         icon = "icon_configure",
-        onClick = function()
-            cheatUI.view.hidden = false
-        end,
+        ui = cheatUI
+        -- OLD IMPLEMENTATION
+        -- onClick = function()
+        --     cheatUI.view.hidden = false
+        -- end,
     })
     
     local testActionUI = mjrequire "creativeMode/actions/testActionUI"

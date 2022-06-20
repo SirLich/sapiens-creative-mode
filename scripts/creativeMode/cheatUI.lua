@@ -9,7 +9,7 @@ local cheatUI = {
 	view = nil,
 }
 
--- Requires
+-- Sapiens
 local mjm = mjrequire "common/mjm"
 local vec3 = mjm.vec3
 local vec2 = mjm.vec2
@@ -18,8 +18,8 @@ local uiStandardButton = mjrequire "mainThread/ui/uiCommon/uiStandardButton"
 local mob = mjrequire "common/mob/mob"
 
 -- Local state
-local backgroundWidth = 1140
-local backgroundHeight = 640
+local backgroundWidth = 900
+local backgroundHeight = 300
 local backgroundSize = vec2(backgroundWidth, backgroundHeight)
 
 local buttonBoxWidth = 80
@@ -30,7 +30,7 @@ local buttonWidth = 180
 local buttonHeight = 40
 local buttonSize = vec2(buttonWidth, buttonHeight)
 
--- Called when the UI is ready to be geneated
+-- Called when the UI is ready to be generated
 function cheatUI:initGameElement(gameUI)
 	mj:log("Initializing Cheat UI...")
 
