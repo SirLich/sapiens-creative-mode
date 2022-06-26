@@ -1,14 +1,14 @@
 --- Globally namespaced cheat commands
+-- Made available via requiring in creativeMode.lua
 
 -- Module Setup
 cheat = {}
 
--- Sapiens
+-- Base
 local mj = mjrequire "common/mj"
 local logicInterface = mjrequire "mainThread/logicInterface"
 local typeMaps = mjrequire "common/typeMaps"
 local skill = mjrequire "common/skill"
-local constructUIHelper = mjrequire "mainThread/ui/constructableUIHelper"
 
 -- Hammerstone
 local gameState = mjrequire "hammerstone/state/gameState"
@@ -53,12 +53,20 @@ function cheat:Spawn(objectName)
 end
 
 function cheat:EnableInstantBuild()
+	mj:log("CM: Enabled Instant Build")
 	--- Enables instant build
 	-- @return nil
 
 	saveState:set("instantBuild", true)
 	completeCheat() -- Sapiens Global
-	constructUIHelper.instantBuild = true
+end
+
+function cheat:DisableInstantBuild()
+	mj:log("CM: Disabled Instant Build")
+	--- Disables Instant build mode. Requires restart.
+	-- @return nil
+
+	saveState:set("instantBuild", false)
 end
 
 -- Module return
