@@ -17,7 +17,7 @@ function mod:onload(constructableUIHelper)
 	-- Shadow checkHasSeenRequiredResources
 	local super_CheckHasSeenRequiredResources = constructableUIHelper.checkHasSeenRequiredResources
 	constructableUIHelper.checkHasSeenRequiredResources = function(self, constructableType, missingResourceGroups)
-		if saveState:get("instantBuild", false) == true then
+		if saveState:getWorldValue("instantBuild", false) == true then
 			return true
 		else
 			super_CheckHasSeenRequiredResources(self, constructableType, missingResourceGroups)
@@ -27,7 +27,7 @@ function mod:onload(constructableUIHelper)
 	-- Shadow checkHasSeenRequiredTools
 	local superCheckHasSeenRequiredTools = constructableUIHelper.checkHasSeenRequiredTools
 	constructableUIHelper.checkHasSeenRequiredTools = function(self, constructableType, missingTools)
-		if saveState:get("instantBuild", false) == true then
+		if saveState:getWorldValue("instantBuild", false) == true then
 			return true
 		else
 			superCheckHasSeenRequiredTools(self, constructableType, missingTools)

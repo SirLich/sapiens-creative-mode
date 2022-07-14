@@ -9,7 +9,6 @@ local mod = {
 -- Base
 local serverTerrain = mjrequire "server/serverTerrain"
 local plan = mjrequire "common/plan"
-local server = mjrequire "server/server"
 
 -- Hammerstone
 local saveState = mjrequire "hammerstone/state/saveState"
@@ -19,18 +18,15 @@ local function isInstantBuildMode(tribeID)
 	-- @param tribeID: The ID of the tribe that you are testing for.
 	-- @return nil
 
-	mj:log("InstantBuildMode called")
 	
 	local clientID = mod.serverWorld:clientIDForTribeID(tribeID)
 
-	return server:callClientFunction(
-		"testPrint",
-		clientID,
-		"THIS IS COMING FROM THE SERVER"
-	)
+	-- TODO: Give this it's own key.
+	local res = saveState:getWorldValueFromServer(clientID, "instantBuild")
 
-	-- saveState:get('instantBuild')
-
+	mj:log("InstantBuildMode called:")
+	mj:log(res)
+	return res
 	
 end
 

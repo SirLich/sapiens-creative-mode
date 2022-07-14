@@ -30,8 +30,19 @@ function creativeMode:init()
     inputManager:addMapping("creativeMode", "toggleMenu", keyCodes.period, nil)
 
     uiManager:registerManageElement(settingsUI);
+
+    creativeMode:reapplySaveState()
 end
 
+function creativeMode:reapplySaveState()
+    -- TODO: Doing timers like this is a stupid way to handle ordering.
+    timer:addCallbackTimer(2, function()
+        -- Restore state
+        if saveState:getWorldValue("instantBuild", false) then
+            cheat:EnableInstantBuild()
+        end
+    end)
+end
 
 -- Module return
 return creativeMode
