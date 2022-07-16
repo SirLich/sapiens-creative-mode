@@ -2,15 +2,14 @@
 -- Can be considered as the 'main' file of the mod.
 -- @author SirLich
 
-local creativeMode = {}
+local creativeMode = {
+    clientState = nil
+}
 
 -- Base
-local keyCodes = mjrequire "mainThread/keyMapping".keyCodes
 local timer = mjrequire "common/timer"
 
 -- Hammerstone
-local localeManager = mjrequire "hammerstone/locale/localeManager"
-local inputManager = mjrequire "hammerstone/input/inputManager"
 local uiManager = mjrequire "hammerstone/ui/uiManager"
 local saveState = mjrequire "hammerstone/state/saveState"
 
@@ -20,29 +19,25 @@ local settingsUI = mjrequire "creativeMode/settingsUI"
 
 
 -- CreativeMode entrypoint, called by shadowing 'controller.lua' in the main thread.
-function creativeMode:init()
+function creativeMode:init(clientState)
 	mj:log("Initializing CreativeMode Mod...")
 
-    localeManager:addInputGroupMapping("creativeMode", "Creative Mode")
-    localeManager:addInputKeyMapping("creativeMode", "toggleMenu", "Toggle Menu")
-
-    inputManager:addGroup("creativeMode")
-    inputManager:addMapping("creativeMode", "toggleMenu", keyCodes.period, nil)
+    creativeMode.clientState = clientState
 
     uiManager:registerManageElement(settingsUI);
 
-    creativeMode:reapplySaveState()
-end
+    cheat:setClientState(clientState)
 
-function creativeMode:reapplySaveState()
-    -- TODO: Doing timers like this is a stupid way to handle ordering.
+    -- TODO: A timer is a lousy way to do this.
     timer:addCallbackTimer(2, function()
         -- Restore state
-        if saveState:getWorldValue("instantBuild", false) then
+        if saveState.getValue('instantBuild') then
             cheat:EnableInstantBuild()
         end
     end)
+
 end
+
 
 -- Module return
 return creativeMode

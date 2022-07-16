@@ -1,7 +1,10 @@
 --- Globally namespaced cheat commands
--- Made available via requiring in creativeMode.lua
+--- Made available via requiring in creativeMode.lua
 
-cheat = {}
+cheat = {
+	clientState = nil,
+	world = nil
+}
 
 -- Base
 local mj = mjrequire "common/mj"
@@ -13,6 +16,11 @@ local skill = mjrequire "common/skill"
 local gameState = mjrequire "hammerstone/state/gameState"
 local logger = mjrequire "hammerstone/logging"
 local saveState = mjrequire "hammerstone/state/saveState"
+
+function cheat:setClientState(clientState)
+	cheat.clientState = clientState
+end
+
 
 function cheat:UnlockSkill(skillName)
 	--- Unlocks a skill by name
@@ -56,7 +64,7 @@ function cheat:EnableInstantBuild()
 	--- Enables instant build
 	-- @return nil
 
-	saveState:setWorldValue("instantBuild", true)
+	saveState.setValue('instantBuild', true)
 	completeCheat() -- Sapiens Global
 end
 
@@ -65,7 +73,12 @@ function cheat:DisableInstantBuild()
 	--- Disables Instant build mode. Requires restart.
 	-- @return nil
 
-	saveState:setWorldValue("instantBuild", false)
+	saveState.setValue('instantBuild', false)
+
 end
+
+-- function cheat:Day()
+-- 	world:setSunrise(offset)
+-- end
 
 return cheat

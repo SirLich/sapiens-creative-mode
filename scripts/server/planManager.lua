@@ -14,19 +14,17 @@ local plan = mjrequire "common/plan"
 local saveState = mjrequire "hammerstone/state/saveState"
 
 local function isInstantBuildMode(tribeID)
-	--- Returns true if the instant build mode is toggled on the client.
 	-- @param tribeID: The ID of the tribe that you are testing for.
-	-- @return nil
-
+	-- @return boolean: True if the instant build mode is toggled on for the world.
 	
-	local clientID = mod.serverWorld:clientIDForTribeID(tribeID)
-
-	-- TODO: Give this it's own key.
-	local res = saveState:getWorldValueFromServer(clientID, "instantBuild")
+	-- local clientID = mod.serverWorld:clientIDForTribeID(tribeID)
+	-- local clientState = mod.serverWorld:getClientStates()[clientID]
+	
+	local ret = saveState.getValue('instantBuild')
 
 	mj:log("InstantBuildMode called:")
-	mj:log(res)
-	return res
+	mj:log(ret)
+	return ret
 	
 end
 
@@ -39,6 +37,7 @@ function mod:onload(planManager)
 
 	local super_addTerrainModificationPlan = planManager.addTerrainModificationPlan
 	planManager.addTerrainModificationPlan = function(self, tribeID, planTypeIndex, vertIDs, fillConstructableTypeIndex, researchTypeIndex, restrictedResourceObjectTypesOrNil, restrictedToolObjectTypesOrNil, planOrderIndexOrNil)
+		mj:log("Calling Terrain Modification plan!")
 		if isInstantBuildMode(tribeID) and vertIDs and vertIDs[1] then
 			for i, vertID in ipairs(vertIDs) do
 				-- Filling
