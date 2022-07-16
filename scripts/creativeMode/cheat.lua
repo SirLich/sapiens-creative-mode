@@ -1,3 +1,4 @@
+--- CreativeMode: cheat.lua
 --- Globally namespaced cheat commands
 --- Made available via requiring in creativeMode.lua
 
@@ -64,7 +65,7 @@ function cheat:EnableInstantBuild()
 	--- Enables instant build
 	-- @return nil
 
-	saveState.setValue('instantBuild', true)
+	saveState:setValueClient('instantBuild', true)
 	completeCheat() -- Sapiens Global
 end
 

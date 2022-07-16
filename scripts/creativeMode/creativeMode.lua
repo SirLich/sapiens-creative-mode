@@ -28,10 +28,9 @@ function creativeMode:init(clientState)
 
     cheat:setClientState(clientState)
 
-    -- TODO: A timer is a lousy way to do this.
-    timer:addCallbackTimer(2, function()
+    timer:addCallbackTimer(3, function()
         -- Restore state
-        if saveState.getValue('instantBuild') then
+        if saveState:getValueClient('instantBuild') then
             cheat:EnableInstantBuild()
         end
     end)

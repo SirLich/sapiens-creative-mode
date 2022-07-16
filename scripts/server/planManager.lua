@@ -17,15 +17,10 @@ local function isInstantBuildMode(tribeID)
 	-- @param tribeID: The ID of the tribe that you are testing for.
 	-- @return boolean: True if the instant build mode is toggled on for the world.
 	
-	-- local clientID = mod.serverWorld:clientIDForTribeID(tribeID)
 	-- local clientState = mod.serverWorld:getClientStates()[clientID]
 	
-	local ret = saveState.getValue('instantBuild')
-
-	mj:log("InstantBuildMode called:")
-	mj:log(ret)
-	return ret
-	
+	local clientID = mod.serverWorld:clientIDForTribeID(tribeID)
+	return saveState:getValueServer('instantBuild', clientID)
 end
 
 function mod:onload(planManager)
