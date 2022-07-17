@@ -60,26 +60,60 @@ function cheat:Spawn(objectName)
 	spawn(objectName)
 end
 
-function cheat:EnableInstantBuild()
-	mj:log("CM: Enabled Instant Build")
+function cheat:SetInstantBuild(newValue)
+	--- Disables Instant build mode. Requires restart!
+	--- @param newValue boolean The new value of the instant build flag.
+	--- @return nil
+
+	saveState.setValueClient('cm.instantBuild', newValue)
+	if newValue == true then
+		completeCheat()
+	else
+		logger:log("Instant build mode disabled: Please restart.")
+	end
+end
+
+function cheat:SetInstantDig(newValue)
 	--- Enables instant build
-	-- @return nil
+	--- @param newValue boolean The new value of the instant dig flag.
+	--- @return nil
 
-	saveState:setValueClient('instantBuild', true)
-	completeCheat() -- Sapiens Global
+	saveState:setValueClient('cm.instantDig', newValue)
 end
 
-function cheat:DisableInstantBuild()
-	mj:log("CM: Disabled Instant Build")
-	--- Disables Instant build mode. Requires restart.
-	-- @return nil
+function cheat:SetUIUnlocked(newValue)
+	--- Unlocks the UI (when building)
+	--- @param newValue boolean The new value of the UI unlocked flag.
+	--- @return nil
 
-	saveState.setValue('instantBuild', false)
-
+	saveState:setValueClient('cm.uiUnlocked', newValue)
 end
 
--- function cheat:Day()
--- 	world:setSunrise(offset)
--- end
+function cheat:SetSunrise()
+	--- Sets the time to sunrise.
+	--- @return nil
+	setSunrise(0)
+end
+
+function cheat:SetDay()
+	--- Sets the time to day.
+	--- @return nil
+
+	setSunrise(500)
+end
+
+function cheat:SetSunset()
+	--- Sets the time to sunset.
+	--- @return nil
+
+	setSunrise(1000)
+end
+
+function cheat:SetNight()
+	--- Sets the time to night.
+	--- @return nil
+
+	setSunrise(2000)
+end
 
 return cheat
