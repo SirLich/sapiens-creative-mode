@@ -32,8 +32,8 @@ function cheat:Locate(objectName, distance)
 		return nil
 	end
 
-	if distance < 0 then
-		distance = 1000
+	if distance == nil then
+		distance = 2500
 	end
 
 	local requestInfo = {
