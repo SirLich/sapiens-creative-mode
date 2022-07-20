@@ -18,13 +18,25 @@ function mod:onload(constructableUIHelper)
 	-- Shadow checkHasSeenRequiredResources
 	local super_CheckHasSeenRequiredResources = constructableUIHelper.checkHasSeenRequiredResources
 	constructableUIHelper.checkHasSeenRequiredResources = function(self, constructableType, missingResourceGroups)
-		return isUIUnlocked() or super_CheckHasSeenRequiredResources(self, constructableType, missingResourceGroups)
+		return true 
+
+		if isUIUnlocked() then
+			return true
+		end
+
+		super_CheckHasSeenRequiredResources(self, constructableType, missingResourceGroups)
 	end
 	
 	-- Shadow checkHasSeenRequiredTools
-	local superCheckHasSeenRequiredTools = constructableUIHelper.checkHasSeenRequiredTools
+	local super_CheckHasSeenRequiredTools = constructableUIHelper.checkHasSeenRequiredTools
 	constructableUIHelper.checkHasSeenRequiredTools = function(self, constructableType, missingTools)
-		return isUIUnlocked() or superCheckHasSeenRequiredTools(self, constructableType, missingTools)
+		return true 
+
+		if isUIUnlocked() then
+			return true
+		end
+		
+		return super_CheckHasSeenRequiredTools(self, constructableType, missingTools)
 	end
 end
 

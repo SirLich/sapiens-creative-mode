@@ -22,6 +22,40 @@ function cheat:setClientState(clientState)
 	cheat.clientState = clientState
 end
 
+function cheat:Locate(objectName, distance)
+	local localPlayer = mjrequire "mainThread/localPlayer"
+	local gameObject = mjrequire "common/gameObject"
+
+	local type = gameObject.types[objectName]
+	if type == nil then
+		mj:log("Could not locate ", objectName, " as it is not a valid type.")
+		return nil
+	end
+
+	if distance < 0 then
+		distance = 1000
+	end
+
+	local requestInfo = {
+		types = {type.index},
+		pos = localPlayer:getPos(),
+		radius = mj:mToP(distance),
+		tribeRestrictInfo = nil
+	}
+
+	logicInterface:callLogicThreadFunction("getGameObjectsOfTypesWithinRadiusOfPos", requestInfo, function(objects)
+		for i, info in ipairs(objects) do
+			logicInterface:callLogicThreadFunction("retrieveObject", info.uniqueID, function(retrievedObjectResponse) 
+				 localPlayer:followObject(retrievedObjectResponse, false, retrievedObjectResponse.pos)
+			end)
+
+			-- TODO: This is dumb.
+			return
+		end
+	end)
+
+	mj:log("Could not locate ", objectName, ", since it was not found.")
+end
 
 function cheat:UnlockSkill(skillName)
 	--- Unlocks a skill by name

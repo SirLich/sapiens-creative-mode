@@ -1,3 +1,4 @@
+--- CreativeMode: localPlayer.lua
 --- @author SirLich
 
 local mod = {

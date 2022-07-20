@@ -1,4 +1,4 @@
---- CreativeMode shadow: server.lua
+--- CreativeMode: server.lua
 --- @author SirLich
 
 local mod = {
@@ -10,14 +10,15 @@ local mod = {
 	server = nil
 }
 
+local function unlockSkill(clientID, paramTable)
+	--- paramTable Required because net-functions can only pass one argument
+	mod.serverWorld:completeDiscoveryForTribe(paramTable.tribeID, paramTable.skillTypeIndex)
+end
+
+
 local function init()
 	-- Register net function for cheats
 	mod.server:registerNetFunction("unlockSkill", unlockSkill)
-end
-
--- paramTable Required because net-functions can only pass one argument
-local function unlockSkill(clientID, paramTable)
-	mod.serverWorld:completeDiscoveryForTribe(paramTable.tribeID, paramTable.skillTypeIndex)
 end
 
 function mod:onload(server)
