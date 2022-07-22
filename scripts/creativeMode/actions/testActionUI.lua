@@ -1,43 +1,30 @@
---- A module to test out the UI Manager action-slots.
--- @author SirLich
+--- CreativeMode: testActionUI
+--- @author SirLich
 
--- Module setup
-local testActionUI = {
-	-- Required by the UI Manager
-	view = nil,
+local testActionUI = {}
 
-	--  Required by the UI Manager
-	name = "Test Action UI"
-}
+-- Base 
+local gameObject = mjrequire "common/gameObject"
+local logicInterface = mjrequire "mainThread/logicInterface"
 
--- Requires
-local uiStandardButton = mjrequire "mainThread/ui/uiCommon/uiStandardButton"
+-- Math
 local mjm = mjrequire "common/mjm"
 local vec3 = mjm.vec3
 local vec2 = mjm.vec2
 
--- Local State
-local buttonWidth = 180
-local buttonHeight = 40
-local buttonSize = vec2(buttonWidth, buttonHeight)
-
--- This function is called automatically from the UI manager
--- The purpose of the function is to define `view`, usually by injecting a new view
--- into one of the other UI arguments.
-function testActionUI:initActionElement(viewContainer, gameUI, hubUI, world)
-	-- Create a parent container
-	self.view = View.new(viewContainer)
-
-	-- Add test button
-	local testBUtton = uiStandardButton:create(self.view, buttonSize)
-	testBUtton.relativePosition = ViewPosition(MJPositionCenter, MJPositionTop)
-	testBUtton.baseOffset = vec3(0, 0, 5) 
-
-	uiStandardButton:setText(testBUtton, "Testing Context-Aware Buttons")
-	uiStandardButton:setClickFunction(testBUtton, function()
-		spawn("chicken")
-	end)
+function testActionUI:getName(baseObjectInfo, multiSelectAllObjects, lookAtPos)
+	mj:log(baseObjectInfo)
+	return "Max Needs"
 end
 
--- Module return
+function testActionUI:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos)
+	return gameObject.types[baseObjectInfo.objectTypeIndex].key == 'sapien'
+end
+
+function testActionUI:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos)
+	logicInterface:callServerFunction("maxFollowerNeeds", {
+		[1] = baseObjectInfo.uniqueID
+	})
+end
+
 return testActionUI

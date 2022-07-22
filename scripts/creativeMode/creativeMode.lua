@@ -16,7 +16,7 @@ local saveState = mjrequire "hammerstone/state/saveState"
 -- Creative Mode
 local cheat = mjrequire "creativeMode/cheat" -- Not really used, but we need to import so the global is exposed.
 local settingsUI = mjrequire "creativeMode/settingsUI"
-
+local testActionUI = mjrequire "creativeMode/actions/testActionUI"
 
 -- CreativeMode entrypoint, called by shadowing 'controller.lua' in the main thread.
 function creativeMode:init(clientState)
@@ -25,6 +25,7 @@ function creativeMode:init(clientState)
     creativeMode.clientState = clientState
 
     uiManager:registerManageElement(settingsUI);
+    uiManager:registerActionElement(testActionUI);
 
     cheat:setClientState(clientState)
 
