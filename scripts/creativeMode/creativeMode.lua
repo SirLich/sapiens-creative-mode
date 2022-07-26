@@ -1,12 +1,12 @@
 --- Mod entry point for the CreativeMode Mod.
--- Can be considered as the 'main' file of the mod.
--- @author SirLich
+--- Can be considered as the 'main' file of the mod.
+--- @author SirLich
 
 local creativeMode = {
     clientState = nil
 }
 
--- Base
+-- Sapiens
 local timer = mjrequire "common/timer"
 
 -- Hammerstone
@@ -16,7 +16,7 @@ local saveState = mjrequire "hammerstone/state/saveState"
 -- Creative Mode
 local cheat = mjrequire "creativeMode/cheat" -- Not really used, but we need to import so the global is exposed.
 local settingsUI = mjrequire "creativeMode/settingsUI"
-local testActionUI = mjrequire "creativeMode/actions/testActionUI"
+local maxNeedsAction = mjrequire "creativeMode/actions/maxNeedsAction"
 
 -- CreativeMode entrypoint, called by shadowing 'controller.lua' in the main thread.
 function creativeMode:init(clientState)
@@ -25,7 +25,7 @@ function creativeMode:init(clientState)
     creativeMode.clientState = clientState
 
     uiManager:registerManageElement(settingsUI);
-    uiManager:registerActionElement(testActionUI);
+    uiManager:registerActionElement(maxNeedsAction);
 
     cheat:setClientState(clientState)
 
@@ -41,6 +41,4 @@ function creativeMode:init(clientState)
 
 end
 
-
--- Module return
 return creativeMode

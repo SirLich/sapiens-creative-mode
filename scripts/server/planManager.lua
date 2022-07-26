@@ -1,12 +1,12 @@
 --- CreativeMode: planManager.lua
--- @author SirLich
+--- @author SirLich
 
 local mod = {
 	loadOrder = 1,
 	serverWorld = nil
 }
 
--- Base
+-- Sapiens
 local serverTerrain = mjrequire "server/serverTerrain"
 local plan = mjrequire "common/plan"
 

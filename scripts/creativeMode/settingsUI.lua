@@ -1,7 +1,7 @@
 --- CreativeMode: settingsUI.lua 
 --- GameView which will be used to display the cheat UI.
--- Lifecycle events will be called automatically by the uiManager.
--- @author SirLich
+--- Lifecycle events will be called automatically by the uiManager.
+--- @author SirLich
 
 local settingsUI = {
 	name = "Creative Mode",
@@ -130,7 +130,7 @@ function settingsUI:init(manageUI)
 		self.view.hidden = true
 	end)
 
-	addTitleHeader(backgroundView, "Toggle Options (some options required Restart)")
+	addTitleHeader(backgroundView, "Toggle Options (requires restart)")
 
 	-- Toggle buttons
 	addToggleButton(backgroundView, "Instant Build", 'cm.instantBuild', function(newValue)
@@ -145,7 +145,7 @@ function settingsUI:init(manageUI)
 		cheat:SetUIUnlocked(newValue)
 	end)
 
-	addTitleHeader(backgroundView, "Actions (some are permanent)")
+	addTitleHeader(backgroundView, "Actions (permanent)")
 
 
 	addButton(backgroundView, "Set Sunrise", function()

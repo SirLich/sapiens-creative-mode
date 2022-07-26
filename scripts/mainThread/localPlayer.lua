@@ -11,7 +11,6 @@ function mod:onload(localPlayer)
 	local super_setBridge = localPlayer.setBridge
 	localPlayer.setBridge = function(self, bridge, clientState)
 		super_setBridge(localPlayer, bridge, clientState)
-
 		creativeMode:init(clientState)
 	end
 end

@@ -1,13 +1,14 @@
 --- CreativeMode: cheat.lua
 --- Globally namespaced cheat commands
 --- Made available via requiring in creativeMode.lua
+--- @author SirLich
 
 cheat = {
 	clientState = nil,
 	world = nil
 }
 
--- Base
+-- Sapiens
 local mj = mjrequire "common/mj"
 local logicInterface = mjrequire "mainThread/logicInterface"
 local typeMaps = mjrequire "common/typeMaps"

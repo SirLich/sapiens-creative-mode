@@ -5,7 +5,7 @@ local mod = {
 	loadOrder = 1
 }
 
--- Base
+-- Sapiens
 local mj = mjrequire "common/mj"
 
 local function isUIUnlocked()
