@@ -1,3 +1,4 @@
+--- creativeMode.lua
 --- Mod entry point for the CreativeMode Mod.
 --- Can be considered as the 'main' file of the mod.
 --- @author SirLich
