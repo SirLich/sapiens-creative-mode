@@ -108,11 +108,11 @@ function cheat:SetInstantBuild(newValue)
 	--- @param newValue boolean The new value of the instant build flag.
 	--- @return nil
 
-	saveState.setValueClient('cm.instantBuild', newValue)
+	saveState:setValue('cm.instantBuild', newValue)
 	if newValue == true then
 		completeCheat()
 	else
-		logger:log("Instant build mode disabled: Please restart.")
+		logger:log("Instant build mode disabled: Please restart!")
 	end
 end
 
@@ -121,7 +121,7 @@ function cheat:SetInstantDig(newValue)
 	--- @param newValue boolean The new value of the instant dig flag.
 	--- @return nil
 
-	saveState:setValueClient('cm.instantDig', newValue)
+	saveState:setValue('cm.instantDig', newValue)
 end
 
 function cheat:SetUIUnlocked(newValue)
@@ -129,7 +129,7 @@ function cheat:SetUIUnlocked(newValue)
 	--- @param newValue boolean The new value of the UI unlocked flag.
 	--- @return nil
 
-	saveState:setValueClient('cm.uiUnlocked', newValue)
+	saveState:setValue('cm.uiUnlocked', newValue)
 end
 
 function cheat:SetSunrise()
