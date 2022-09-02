@@ -17,8 +17,10 @@ local function isInstantDig(tribeID)
 	--- @param tribeID string: The ID of the tribe that you are testing for.
 	--- @return boolean: True if the instant build mode is toggled on for the world.
 		
-	local clientID = mod.serverWorld:clientIDForTribeID(tribeID)
-	return saveState:getValueServer('cm.instantDig', clientID)
+	return saveState:getValue('cm.instantDig', {
+		tribeID = tribeID,
+		default = false
+	})
 end
 
 function mod:onload(planManager)
