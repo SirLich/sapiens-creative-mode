@@ -87,12 +87,20 @@ function cheat:UnlockAllSkills()
 
 end
 
-function cheat:Spawn(objectName)
+function cheat:Spawn(objectName, count)
 	--- Spawns an entity by name
 	-- @param objectName The name of the entity or object to spawn. e.g. "chicken"
 	-- @return nil
 
-	spawn(objectName)
+	if count == nil then
+		count = 1
+	end
+
+	
+
+	for i=1, count do
+		spawn(objectName)
+	end
 end
 
 function cheat:SetInstantBuild(newValue)
