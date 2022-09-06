@@ -20,6 +20,7 @@ local timer = mjrequire "common/timer"
 local mjm = mjrequire "common/mjm"
 local vec3 = mjm.vec3
 local vec2 = mjm.vec2
+local vec4 = mjm.vec4
 
 -- Globals
 local backgroundWidth = 1140
@@ -39,6 +40,22 @@ local elementYOffsetStart = -20
 local elementYOffset = elementYOffsetStart
 local yOffsetBetweenElements = buttonHeight
 local elementTitleX = - backgroundWidth * 0.5 - 10
+
+local requireRestartTextView
+
+local function setRequireRestart(needsRestart)
+	requireRestartTextView.hidden = false
+
+	if needsRestart then
+		requireRestartTextView.color = vec4(1.0, 0.0, 0.0, 1.0)
+		requireRestartTextView.font = Font(uiCommon.fontName, 2)
+		requireRestartTextView.text = "[Settings Applied] Restart Required!"
+	else
+		requireRestartTextView.color = vec4(1.0, 1.0, 1.0, 0.3)
+		requireRestartTextView.font = Font(uiCommon.fontName, 15)
+		requireRestartTextView.text = "[Settings Applied] No need to restart :)"
+	end
+end
 
 -- ============================================================================
 -- Copied from optionsView.lua
@@ -72,31 +89,29 @@ end
 local function addToggleButton(parentView, toggleButtonTitle, settingID, changedFunction)
 	--- @param settingID string The ID of the setting to toggle (used for initial state)
 
-    local toggleButton = uiStandardButton:create(parentView, vec2(26,26), uiStandardButton.types.toggle)
-    toggleButton.relativePosition = ViewPosition(MJPositionInnerLeft, MJPositionTop)
-    toggleButton.baseOffset = vec3(elementControlX, elementYOffset, 0)
+	local toggleButton = uiStandardButton:create(parentView, vec2(26,26), uiStandardButton.types.toggle)
+	toggleButton.relativePosition = ViewPosition(MJPositionInnerLeft, MJPositionTop)
+	toggleButton.baseOffset = vec3(elementControlX, elementYOffset, 0)
 
-	timer:addCallbackTimer(10, function()
+	timer:addCallbackTimer(3, function()
 		local saveState = mjrequire "hammerstone/state/saveState"
-		saveState.setValueClient('dummy', true)
-		uiStandardButton:setToggleState(toggleButton, saveState.getValueClient(settingID))
-		mj:log("saveState:getValue: ", settingID , " ", saveState.getValueClient(settingID))
+		uiStandardButton:setToggleState(toggleButton, saveState:getValue(settingID))
 	end)
 
-    
-    local textView = TextView.new(parentView)
-    textView.font = Font(uiCommon.fontName, 16)
-    textView.relativePosition = ViewPosition(MJPositionInnerRight, MJPositionTop)
-    textView.baseOffset = vec3(elementTitleX,elementYOffset - 4, 0)
-    textView.text = toggleButtonTitle
+	
+	local textView = TextView.new(parentView)
+	textView.font = Font(uiCommon.fontName, 16)
+	textView.relativePosition = ViewPosition(MJPositionInnerRight, MJPositionTop)
+	textView.baseOffset = vec3(elementTitleX, elementYOffset - 4, 0)
+	textView.text = toggleButtonTitle
 
-    uiStandardButton:setClickFunction(toggleButton, function()
-        changedFunction(uiStandardButton:getToggleState(toggleButton))
-    end)
+	uiStandardButton:setClickFunction(toggleButton, function()
+		changedFunction(uiStandardButton:getToggleState(toggleButton))
+	end)
 
-    elementYOffset = elementYOffset - yOffsetBetweenElements
-    
-    return toggleButton
+	elementYOffset = elementYOffset - yOffsetBetweenElements
+	
+	return toggleButton
 end
 
 -- ============================================================================
@@ -130,11 +145,12 @@ function settingsUI:init(manageUI)
 		self.view.hidden = true
 	end)
 
-	addTitleHeader(backgroundView, "Toggle Options (requires restart)")
+	addTitleHeader(backgroundView, "Options")
 
 	-- Toggle buttons
 	addToggleButton(backgroundView, "Instant Build", 'cm.instantBuild', function(newValue)
 		cheat:SetInstantBuild(newValue)
+		setRequireRestart(true)
 	end)
 
 	addToggleButton(backgroundView, "Instant Dig", 'cm.instantDig', function(newValue)
@@ -145,7 +161,7 @@ function settingsUI:init(manageUI)
 		cheat:SetUIUnlocked(newValue)
 	end)
 
-	addTitleHeader(backgroundView, "Actions (permanent)")
+	addTitleHeader(backgroundView, "Actions")
 
 
 	addButton(backgroundView, "Set Sunrise", function()
@@ -155,6 +171,13 @@ function settingsUI:init(manageUI)
 	addButton(backgroundView, "Unlock All Skills", function()
 		cheat:UnlockAllSkills()
 	end)
+
+	requireRestartTextView= TextView.new(backgroundView)
+	requireRestartTextView.relativePosition = ViewPosition(MJPositionCenter, MJPositionBelow)
+	requireRestartTextView.baseOffset = vec3(0, 100, 0)
+	requireRestartTextView.color = vec4(1.0, 0.0, 0.0, 1.0)
+	requireRestartTextView.font = Font(uiCommon.fontName, 50)
+	requireRestartTextView.hidden = true
 end
 
 -- Called every frame

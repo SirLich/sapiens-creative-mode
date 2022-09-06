@@ -10,7 +10,11 @@ local mj = mjrequire "common/mj"
 
 local function isUIUnlocked()
 	local saveState = mjrequire "hammerstone/state/saveState"
-	return saveState:getValueClient('cm.uiUnlocked')
+	local isUnlocked =  saveState:getValue('cm.uiUnlocked', {
+		default=false
+	})
+
+	return isUnlocked
 end
 
 function mod:onload(constructableUIHelper)

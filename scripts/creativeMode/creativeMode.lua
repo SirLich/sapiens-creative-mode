@@ -13,11 +13,12 @@ local timer = mjrequire "common/timer"
 -- Hammerstone
 local uiManager = mjrequire "hammerstone/ui/uiManager"
 local saveState = mjrequire "hammerstone/state/saveState"
+local settingsUI = mjrequire "creativeMode/settingsUI"
 
 -- Creative Mode
 local cheat = mjrequire "creativeMode/cheat" -- Not really used, but we need to import so the global is exposed.
-local settingsUI = mjrequire "creativeMode/settingsUI"
 local maxNeedsAction = mjrequire "creativeMode/actions/maxNeedsAction"
+local actions = mjrequire "creativeMode/actions/actions"
 
 -- CreativeMode entrypoint, called by shadowing 'controller.lua' in the main thread.
 function creativeMode:init(clientState)
@@ -28,6 +29,10 @@ function creativeMode:init(clientState)
     uiManager:registerManageElement(settingsUI);
     uiManager:registerActionElement(maxNeedsAction);
 
+    for k, action in pairs(actions) do
+        uiManager:registerActionElement(action);
+    end
+
     cheat:setClientState(clientState)
 
     timer:addCallbackTimer(3, function()
@@ -35,7 +40,7 @@ function creativeMode:init(clientState)
         -- Restore state. This one is special, since it needs
         -- to be done after the client state is initialized, and isn't
         -- stored by default, unlike the other flags.
-        if saveState:getValueClient('cm.instantBuild') then
+        if saveState:getValue('cm.instantBuild', {default = false}) then
             completeCheat()
         end
     end)

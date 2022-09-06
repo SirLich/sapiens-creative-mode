@@ -1,7 +1,9 @@
 --- CreativeMode: testActionUI
 --- @author SirLich
 
-local maxNeedsAction = {}
+local maxNeedsAction = {
+	iconModelName = 'icon_happy'
+}
 
 -- Sapiens 
 local gameObject = mjrequire "common/gameObject"
@@ -13,8 +15,13 @@ local vec3 = mjm.vec3
 local vec2 = mjm.vec2
 
 function maxNeedsAction:getName(baseObjectInfo, multiSelectAllObjects, lookAtPos)
-	mj:log(baseObjectInfo)
-	return "Max Needs"
+	local name = baseObjectInfo.sharedState.name
+
+	if #multiSelectAllObjects > 1 then
+		name = 'your Sapiens'
+	end
+
+	return "Make " .. name .. " happy."
 end
 
 function maxNeedsAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos)
@@ -22,9 +29,11 @@ function maxNeedsAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, 
 end
 
 function maxNeedsAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos)
-	logicInterface:callServerFunction("maxFollowerNeeds", {
-		[1] = baseObjectInfo.uniqueID
-	})
+	for i,element in ipairs(multiSelectAllObjects) do
+		logicInterface:callServerFunction("maxFollowerNeeds", {
+			[1] = element.uniqueID
+		})
+	end
 end
 
 return maxNeedsAction

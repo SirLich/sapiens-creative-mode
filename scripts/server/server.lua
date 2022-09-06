@@ -15,10 +15,29 @@ local function unlockSkill(clientID, paramTable)
 	mod.serverWorld:completeDiscoveryForTribe(paramTable.tribeID, paramTable.skillTypeIndex)
 end
 
+local function removeGameObject(clientID, objectID)
+	--- paramTable Required because net-functions can only pass one argument
+
+	local serverGOM = mjrequire "server/serverGOM"
+	serverGOM:removeGameObject(objectID)
+end
+
+local function changeGameObject(clientID, paramTable)
+	--- Changes the type of an in-game object, from the client.
+	--- @param paramTable.objectID string - The object to change
+	--- @param paramTable.newTypeIndex string - The type index to change to
+	--- @param paramTable.keepDegradeInfo bool - Unknown
+
+	local serverGOM = mjrequire "server/serverGOM"
+	serverGOM:changeObjectType(paramTable.objectID, paramTable.newTypeIndex, paramTable.keepDegradeInfo)
+end
+
 
 local function init()
 	-- Register net function for cheats
 	mod.server:registerNetFunction("unlockSkill", unlockSkill)
+	mod.server:registerNetFunction("removeGameObject", removeGameObject)
+	mod.server:registerNetFunction("changeGameObject", changeGameObject)
 end
 
 function mod:onload(server)

@@ -14,6 +14,11 @@ local logicInterface = mjrequire "mainThread/logicInterface"
 local typeMaps = mjrequire "common/typeMaps"
 local skill = mjrequire "common/skill"
 
+local buildUI = mjrequire "mainThread/ui/manageUI/buildUI"
+local placeUI = mjrequire "mainThread/ui/manageUI/placeUI"
+local plantUI = mjrequire "mainThread/ui/manageUI/plantUI"
+local pathUI = mjrequire "mainThread/ui/manageUI/pathUI"
+
 -- Hammerstone
 local gameState = mjrequire "hammerstone/state/gameState"
 local logger = mjrequire "hammerstone/logging"
@@ -96,8 +101,6 @@ function cheat:Spawn(objectName, count)
 		count = 1
 	end
 
-	
-
 	for i=1, count do
 		spawn(objectName)
 	end
@@ -109,6 +112,7 @@ function cheat:SetInstantBuild(newValue)
 	--- @return nil
 
 	saveState:setValue('cm.instantBuild', newValue)
+	
 	if newValue == true then
 		completeCheat()
 	else
@@ -130,6 +134,11 @@ function cheat:SetUIUnlocked(newValue)
 	--- @return nil
 
 	saveState:setValue('cm.uiUnlocked', newValue)
+	
+	pathUI:update()
+	buildUI:update()
+	placeUI:update()
+	plantUI:update()
 end
 
 function cheat:SetSunrise()

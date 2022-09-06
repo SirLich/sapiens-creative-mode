@@ -3,7 +3,10 @@
 
 local mod = {
 	loadOrder = 1,
-	serverWorld = nil
+
+	-- Local State
+	serverWorld = nil,
+	serverGOM = nil
 }
 
 -- Sapiens
@@ -24,11 +27,81 @@ local function isInstantDig(tribeID)
 	})
 end
 
+local function isInstantBuild(tribeID)
+	return saveState:getValue('cm.instantBuild', {
+		tribeID = tribeID,
+		default = false
+	})
+end
+
+
+
+-- local planInfo = {
+-- 	planTypeIndex = constructableType.planTypeIndex or plan.types.build.index,
+-- 	constructableTypeIndex = constructableTypeIndex,
+-- 	pos = buildObjectPos,
+-- 	rotation = buildObjectRotation,
+-- 	restrictedResourceObjectTypes = restrictedResourceObjectTypes,
+-- 	restrictedToolObjectTypes = world:getConstructableRestrictedObjectTypes(constructableTypeIndex, true),
+-- 	attachedToTerrain = attachedToTerrain,
+-- 	noBuildOrder = noBuildOrderModifierDown,
+-- }
+
 function mod:onload(planManager)
 	local super_init = planManager.init
 	planManager.init = function(self, serverGOM, serverWorld, serverSapien, serverCraftArea)
 		super_init(self, serverGOM, serverWorld, serverSapien, serverCraftArea)
+
+		mod.serverGOM = serverGOM
 		mod.serverWorld = serverWorld
+	end
+
+	local super_addBuildOrPlantPlan = planManager.addBuildOrPlantPlan
+	planManager.addBuildOrPlantPlan = function(self, tribeID,
+		planTypeIndex, 
+		constructableTypeIndex, 
+		pos, 
+		rotation, 
+		sapienIDOrNil, 
+		subModelInfosOrNil, 
+		attachedToTerrain,
+		decalBlockersOrNil,
+		restrictedResourceObjectTypesOrNil,
+		restrictedToolObjectTypesOrNil,
+		noBuildOrder)
+
+		mj:log("Setting Restricted Resources: ", restrictedResourceObjectTypesOrNil)
+		planManager.currentRestrictedResources = restrictedResourceObjectTypesOrNil
+
+
+		if isInstantBuild(tribeID) then
+			super_addBuildOrPlantPlan(self, tribeID,
+			planTypeIndex, 
+			constructableTypeIndex,
+			pos, 
+			rotation, 
+			sapienIDOrNil, 
+			subModelInfosOrNil, 
+			attachedToTerrain,
+			decalBlockersOrNil,
+			restrictedResourceObjectTypesOrNil,
+			restrictedToolObjectTypesOrNil,
+			noBuildOrder)
+		else
+			super_addBuildOrPlantPlan(self, tribeID,
+			planTypeIndex, 
+			constructableTypeIndex, 
+			pos, 
+			rotation, 
+			sapienIDOrNil, 
+			subModelInfosOrNil, 
+			attachedToTerrain,
+			decalBlockersOrNil,
+			restrictedResourceObjectTypesOrNil,
+			restrictedToolObjectTypesOrNil,
+			noBuildOrder)
+		end
+
 	end
 
 	local super_addTerrainModificationPlan = planManager.addTerrainModificationPlan
