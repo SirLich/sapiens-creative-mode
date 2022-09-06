@@ -1,0 +1,25 @@
+**Creative Mode in Sapiens**
+
+⭐This mod requires you to also install the Hammerstone Modding Framework.
+
+ 📓 Join the Community: https://discord.gg/WnN8hj2Fyg
+
+Sapiens Creative Mode enables you to build creatively in your sapiens world. Here is a list of the current features: 
+ - Ability to instantly dig/fill holes
+ - Ability to instantly complete and remove buildings
+ - Ability to unlock all skills for all sapiens in your tripe
+ - Ability to unlock the building UI, even if you haven't seen or discovered the items
+
+Additionally, there is a good cheat UI, build around the lua console. Commands include:
+ - cheat:Spawn(...) 
+ - cheat:SetSunrise(...)
+
+The CreativeMode mod also adds a "Max Needs" button to Sapiens, to keep them topped up on health and happiness. 
+
+🐛**Known Bugs**
+
+The mod is very early-alpha. Please be patient. 
+
+Essentially, there is some issues with state-management, meaning the UI boxes often show the wrong values, and you need to restart after setting them. 
+
+So make your selection, restart the game, and then re-enable instant-building (if needed). This should allow you to use Creative Mode.
