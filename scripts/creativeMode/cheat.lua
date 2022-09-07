@@ -112,12 +112,7 @@ function cheat:SetInstantBuild(newValue)
 	--- @return nil
 
 	saveState:setValue('cm.instantBuild', newValue)
-	
-	if newValue == true then
-		completeCheat()
-	else
-		logger:log("Instant build mode disabled: Please restart!")
-	end
+	logicInterface:callServerFunction("setInstantBuild", newValue)
 end
 
 function cheat:SetInstantDig(newValue)

@@ -1,4 +1,4 @@
---- CreativeMode: testActionUI
+--- CreativeMode: maxNeedsAction.lua
 --- @author SirLich
 
 local maxNeedsAction = {
@@ -14,7 +14,7 @@ local mjm = mjrequire "common/mjm"
 local vec3 = mjm.vec3
 local vec2 = mjm.vec2
 
-function maxNeedsAction:getName(baseObjectInfo, multiSelectAllObjects, lookAtPos)
+function maxNeedsAction:getName(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
 	local name = baseObjectInfo.sharedState.name
 
 	if #multiSelectAllObjects > 1 then
@@ -24,11 +24,11 @@ function maxNeedsAction:getName(baseObjectInfo, multiSelectAllObjects, lookAtPos
 	return "Make " .. name .. " happy."
 end
 
-function maxNeedsAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos)
-	return gameObject.types[baseObjectInfo.objectTypeIndex].key == 'sapien'
+function maxNeedsAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
+	return not isTerrain and gameObject.types[baseObjectInfo.objectTypeIndex].key == 'sapien'
 end
 
-function maxNeedsAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos)
+function maxNeedsAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
 	for i,element in ipairs(multiSelectAllObjects) do
 		logicInterface:callServerFunction("maxFollowerNeeds", {
 			[1] = element.uniqueID

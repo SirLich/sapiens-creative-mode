@@ -150,7 +150,11 @@ function settingsUI:init(manageUI)
 	-- Toggle buttons
 	addToggleButton(backgroundView, "Instant Build", 'cm.instantBuild', function(newValue)
 		cheat:SetInstantBuild(newValue)
-		setRequireRestart(true)
+	end)
+
+	timer:addCallbackTimer(3, function()
+		local saveState = mjrequire "hammerstone/state/saveState"
+		cheat:SetInstantBuild(saveState:getValue('cm.instantBuild'))
 	end)
 
 	addToggleButton(backgroundView, "Instant Dig", 'cm.instantDig', function(newValue)

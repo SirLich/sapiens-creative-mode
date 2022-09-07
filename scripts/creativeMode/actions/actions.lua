@@ -1,4 +1,4 @@
---- CreativeMode: testActionUI
+--- CreativeMode: actions.lua
 --- @author SirLich
 
 local actions = {}
@@ -47,15 +47,11 @@ function deleteAction:getName(baseObjectInfo, multiSelectAllObjects, lookAtPos)
 	end
 end
 
-function deleteAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos)
-	return true
+function deleteAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
+	return not isTerrain
 end
 
-function deleteAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos)
-
-	mj:log(baseObjectInfo)
-	mj:log(multiSelectAllObjects)
-
+function deleteAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
 	for i,element in ipairs(multiSelectAllObjects) do
 		logicInterface:callServerFunction("removeGameObject", element.uniqueID)
 	end
@@ -72,11 +68,11 @@ local printAction = {
 	name = 'Print Debug Information'
 }
 
-function printAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos)
+function printAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
 	return false
 end
 
-function printAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos)
+function printAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
 
 	mj:log("Base: ", baseObjectInfo)
 	mj:log("Multi: ", multiSelectAllObjects)
@@ -93,8 +89,8 @@ local forceGrowAction = {
 	name = 'Instantly Grow'
 }
 
-function forceGrowAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos)
-	return baseObjectInfo.sharedState and baseObjectInfo.sharedState.matureTime
+function forceGrowAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
+	return not isTerrain and baseObjectInfo.sharedState and baseObjectInfo.sharedState.matureTime
 end
 
 function forceGrowAction:onClick(object, multiSelectAllObjects, lookAtPos)

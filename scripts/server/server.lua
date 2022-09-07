@@ -33,11 +33,16 @@ local function changeGameObject(clientID, paramTable)
 end
 
 
+
+
 local function init()
 	-- Register net function for cheats
 	mod.server:registerNetFunction("unlockSkill", unlockSkill)
 	mod.server:registerNetFunction("removeGameObject", removeGameObject)
 	mod.server:registerNetFunction("changeGameObject", changeGameObject)
+	mod.server:registerNetFunction("setInstantBuild", function(clientID, param)
+		mod.serverWorld.completionCheatEnabled = param
+	end)
 end
 
 function mod:onload(server)
