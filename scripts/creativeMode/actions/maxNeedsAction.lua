@@ -7,7 +7,10 @@ local maxNeedsAction = {
 
 -- Sapiens 
 local gameObject = mjrequire "common/gameObject"
-local logicInterface = mjrequire "mainThread/logicInterface"
+local logger = mjrequire "hammerstone/logging"
+local statusEffect = mjrequire "common/statusEffect"
+local mood = mjrequire "common/mood"
+local need = mjrequire "common/need"
 
 -- Math
 local mjm = mjrequire "common/mjm"
@@ -30,10 +33,33 @@ end
 
 function maxNeedsAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
 	for i,element in ipairs(multiSelectAllObjects) do
-		logicInterface:callServerFunction("maxFollowerNeeds", {
-			[1] = element.uniqueID
-		})
+		logger:log("maxing element:")
+		logger:log(element)
+		local sharedState = element.sharedState
+		if sharedState and sharedState.needs then
+			for j,needType in ipairs(need.validTypes) do
+				logger:log("maxing need type:")
+				logger:log(needType)
+				sharedState:set("needs", needType.index, 0.0)
+			end
+			for j,moodType in ipairs(mood.validTypes) do
+				logger:log("maxing mood type:")
+				logger:log(moodType)
+				local maxLevel = getTableSize(moodType.descriptions)
+				logger:log(maxLevel)
+				sharedState:set("moods", moodType.index, maxLevel)
+			end
+		end
+		sharedState:set("statusEffects", {})
 	end
+end
+
+function getTableSize(table)
+	local count = 0
+	for i, key in ipairs(table) do
+		count = count + 1
+	end
+	return count
 end
 
 return maxNeedsAction
