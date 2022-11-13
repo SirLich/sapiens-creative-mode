@@ -8,6 +8,7 @@ local maxNeedsAction = {
 -- Sapiens 
 local gameObject = mjrequire "common/gameObject"
 local logicInterface = mjrequire "mainThread/logicInterface"
+local statusEffect = mjrequire "common/statusEffect"
 
 -- Math
 local mjm = mjrequire "common/mjm"
@@ -32,6 +33,9 @@ function maxNeedsAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos
 	for i,element in ipairs(multiSelectAllObjects) do
 		logicInterface:callServerFunction("maxFollowerNeeds", {
 			[1] = element.uniqueID
+		})
+		logicInterface:callServerFunction("removeEffect", {
+			element.sharedState,statusEffect.types.majorVirus.index
 		})
 	end
 end
