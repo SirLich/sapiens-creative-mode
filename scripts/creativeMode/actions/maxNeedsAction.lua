@@ -7,6 +7,8 @@ local maxNeedsAction = {
 
 -- Sapiens 
 local gameObject = mjrequire "common/gameObject"
+local logger = mjrequire "hammerstone/logging"
+local serverSapien = mjrequire "server/serverSapien"
 local logicInterface = mjrequire "mainThread/logicInterface"
 
 -- Math
@@ -29,11 +31,8 @@ function maxNeedsAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, 
 end
 
 function maxNeedsAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
-	for i,element in ipairs(multiSelectAllObjects) do
-		logicInterface:callServerFunction("maxFollowerNeeds", {
-			[1] = element.uniqueID
-		})
-	end
+	logger:log("calling custom function")
+	logicInterface:callServerFunction("maxSapienNeeds",multiSelectAllObjects)
 end
 
 return maxNeedsAction

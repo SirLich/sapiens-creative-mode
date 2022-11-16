@@ -7,7 +7,7 @@ local actions = {}
 local gameObject = mjrequire "common/gameObject"
 local flora = mjrequire "common/flora"
 local logicInterface = mjrequire "mainThread/logicInterface"
-
+local logger = mjrequire "hammerstone/logging"
 -- Math
 local mjm = mjrequire "common/mjm"
 local vec3 = mjm.vec3
@@ -96,28 +96,34 @@ end
 function forceGrowAction:onClick(object, multiSelectAllObjects, lookAtPos)
 
 	for i,element in ipairs(multiSelectAllObjects) do
-		local prevObjectTypeIndex = element.objectTypeIndex
-		local gameObjectType = gameObject.types[element.objectTypeIndex]
-		local floraInfo = flora.types[gameObjectType.floraTypeIndex]
-		local saplingGameObjectTypeKey = floraInfo.saplingGameObjectTypeKey
-		local saplingGameObjectTypeIndex = gameObject.types[saplingGameObjectTypeKey].index
-	
-		local saplingObjectTypeIndex = element.objectTypeIndex
-		local gameObjectType = gameObject.types[saplingObjectTypeIndex]
-	
-		if gameObjectType.floraTypeIndex then
-			local floraInfo = flora.types[gameObjectType.floraTypeIndex]
-			local newTypeIndex = floraInfo.gameObjectTypeIndex
-			if newTypeIndex ~= saplingObjectTypeIndex then
-				logicInterface:callServerFunction("changeGameObject", {
-					objectID = element.uniqueID,
-					newTypeIndex = newTypeIndex
-				})
-			end
-		end
+		logicInterface:callServerFunction("growSapling", element)
 	end
 end
 
 actions.forceGrowAction = forceGrowAction
+-- ==========================================================================================
+-- Force Harvest Actions
+-- ==========================================================================================
+
+local forceHarvestAction = {
+	iconModelName = 'icon_plant',
+	name = 'Instantly Harvest'
+}
+
+function forceHarvestAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
+	return not isTerrain and baseObjectInfo.sharedState and gameObject.types[baseObjectInfo.objectTypeIndex].floraTypeIndex
+	--baseObjectInfo.sharedState.mature
+end
+
+function forceHarvestAction:onClick(bject, multiSelectAllObjects, lookAtPos)
+
+	for i,element in ipairs(multiSelectAllObjects) do
+		logger:log(element)
+		logicInterface:callServerFunction("refillInventory",{element, element.SharedState, true, true})
+	end
+
+end
+
+actions.forceHarvestAction = forceHarvestAction
 
 return actions

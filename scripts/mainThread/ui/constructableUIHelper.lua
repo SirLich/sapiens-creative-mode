@@ -30,6 +30,13 @@ function mod:onload(constructableUIHelper)
 	constructableUIHelper.checkHasSeenRequiredTools = function(self, constructableType, missingTools)
 		return isUIUnlocked() or super_checkHasSeenRequiredTools(self, constructableType, missingTools)
 	end
+
+	-- Shadow checkHasRequiredDiscoveries
+	-- this removes the need to unlock skills for unlocking the build UI
+	local super_checkHasRequiredDiscoveries = constructableUIHelper.checkHasRequiredDiscoveries
+	constructableUIHelper.checkHasRequiredDiscoveries = function(self, constructableType)
+		return isUIUnlocked() or super_checkHasRequiredDiscoveries(self, constructableType)
+	end
 end
 
 return mod

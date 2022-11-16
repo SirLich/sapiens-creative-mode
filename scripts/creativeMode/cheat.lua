@@ -13,6 +13,7 @@ local mj = mjrequire "common/mj"
 local logicInterface = mjrequire "mainThread/logicInterface"
 local typeMaps = mjrequire "common/typeMaps"
 local skill = mjrequire "common/skill"
+local resource = mjrequire "common/resource"
 
 local buildUI = mjrequire "mainThread/ui/manageUI/buildUI"
 local placeUI = mjrequire "mainThread/ui/manageUI/placeUI"
@@ -23,6 +24,56 @@ local pathUI = mjrequire "mainThread/ui/manageUI/pathUI"
 local gameState = mjrequire "hammerstone/state/gameState"
 local logger = mjrequire "hammerstone/logging"
 local saveState = mjrequire "hammerstone/state/saveState"
+
+-- candidate for hammerstone framework
+local function findItemsByKey(searchTable, keyToFind)
+	local results = {}
+	for i,item in ipairs(searchTable) do
+		local keyFound = 0
+		local nameFound = 0
+		local searchKey = tostring(item.key):upper()
+		keyFound = searchKey.find(keyToFind:upper(),true)
+		local searchName = tostring(item.name):upper()
+		nameFound = searchName.find(keyToFind:upper(),true)
+		if keyFound > 0 or nameFound > 0 then
+			for j,type in ipaires(item.resourceTypes) do
+				results = results + resource.types[type].key
+			end
+		end
+	end
+	local msg = ""
+	if not next(results) == nil then
+		msg = tableToCsvString(results)
+	else
+		 msg = "no results found for " .. keyToFind
+	end
+	return msg
+
+end
+
+-- candidate for hammerstone framework
+local function tableToCsvString(table)
+	--assumes the table will have a key field and a name field.
+	local csvString = ""
+	for i,item in ipairs(table) do
+		csvString = csvString .. item.key .. "," .. item.name
+		if i < #table then
+			csvString = csvString .. "\n"
+		end
+	end
+	logger:log("returning csvString")
+	logger:log(csvString)
+	return csvString
+end
+
+function cheat:getAllResources()
+	local resources = resource.types
+	return tableToCsvString(resources)
+end
+
+function cheat:getResourceByName(objectName)
+	return findItemsByKey(resource.types, objectName)
+end
 
 function cheat:setClientState(clientState)
 	cheat.clientState = clientState
@@ -96,6 +147,12 @@ function cheat:Spawn(objectName, count)
 	--- Spawns an entity by name
 	-- @param objectName The name of the entity or object to spawn. e.g. "chicken"
 	-- @return nil
+	local gameObject = mjrequire "common/gameObject"
+	local type = gameObject.types[objectName]
+	if type == nil then
+		mj:log("Could not spawn ", objectName, " as it is not a valid type.")
+		return nil
+	end
 
 	if count == nil then
 		count = 1
