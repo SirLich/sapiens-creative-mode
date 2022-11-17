@@ -93,6 +93,7 @@ function mod:onload(serverGOM)
 		buildOrCraftObject.sharedState.inventories = realInventory
 
 		super_completeImmediatelyCheat(self, buildOrCraftObject, constructableType, planStateOrNil, tribeID)
+
 	end
 end
 

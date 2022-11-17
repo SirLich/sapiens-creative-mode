@@ -94,36 +94,44 @@ function forceGrowAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects,
 end
 
 function forceGrowAction:onClick(object, multiSelectAllObjects, lookAtPos)
-
-	for i,element in ipairs(multiSelectAllObjects) do
-		logicInterface:callServerFunction("growSapling", element)
-	end
+	--- @author Rae
+	--- updated this to call the new function in server.lua
+	logicInterface:callServerFunction("growPlant", multiSelectAllObjects)
 end
 
 actions.forceGrowAction = forceGrowAction
+
+
+
+--- ****************************************************************
+--- @author Rae
+--- added a force replenish action to spawn harvestables on an object
+--- ****************************************************************
+
 -- ==========================================================================================
--- Force Harvest Actions
+-- Force Harvest / Replenish Actions
 -- ==========================================================================================
 
-local forceHarvestAction = {
+local forceReplenishtAction = {
 	iconModelName = 'icon_plant',
-	name = 'Instantly Harvest'
+	name = 'Instantly Replenish'
 }
 
-function forceHarvestAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
+function forceReplenishtAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
 	return not isTerrain and baseObjectInfo.sharedState and gameObject.types[baseObjectInfo.objectTypeIndex].floraTypeIndex
 	--baseObjectInfo.sharedState.mature
 end
 
-function forceHarvestAction:onClick(bject, multiSelectAllObjects, lookAtPos)
-
-	for i,element in ipairs(multiSelectAllObjects) do
-		logger:log(element)
-		logicInterface:callServerFunction("refillInventory",{element, element.SharedState, true, true})
-	end
+function forceReplenishtAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos)
+		logger:log("replenishing harvest")
+		logicInterface:callServerFunction("replenishPlant", multiSelectAllObjects)
 
 end
 
-actions.forceHarvestAction = forceHarvestAction
+actions.forceReplenishtAction = forceReplenishtAction
+--- ****************************************************************
+--- END Rae's changes
+--- ****************************************************************
+
 
 return actions
