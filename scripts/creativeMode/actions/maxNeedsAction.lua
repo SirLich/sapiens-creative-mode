@@ -8,7 +8,6 @@ local maxNeedsAction = {
 -- Sapiens 
 local gameObject = mjrequire "common/gameObject"
 local logger = mjrequire "hammerstone/logging"
-local serverSapien = mjrequire "server/serverSapien"
 local logicInterface = mjrequire "mainThread/logicInterface"
 
 -- Math
@@ -29,10 +28,16 @@ end
 function maxNeedsAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
 	return not isTerrain and gameObject.types[baseObjectInfo.objectTypeIndex].key == 'sapien'
 end
-
+--- ****************************************************************
+--- @author Rae
+--- updated this onClick method to call a new function in server, which then calls the custom sapienUtility.lua file.
+--- ****************************************************************
 function maxNeedsAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
-	logger:log("calling custom function")
-	logicInterface:callServerFunction("maxSapienNeeds",multiSelectAllObjects)
+	logicInterface:callServerFunction("maxNeeds",multiSelectAllObjects)
 end
+--- ****************************************************************
+--- END Rae's changes
+--- ****************************************************************
+
 
 return maxNeedsAction

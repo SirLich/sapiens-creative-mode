@@ -25,6 +25,12 @@ local gameState = mjrequire "hammerstone/state/gameState"
 local logger = mjrequire "hammerstone/logging"
 local saveState = mjrequire "hammerstone/state/saveState"
 
+--- ****************************************************************
+--- author @Rae
+--- added functions to list all resources, and to find a resource by name (partial match, not case senstive)
+--- also includes two helper functions, that maybe should live in hammerstone framework util rather than here...
+--- ****************************************************************
+
 -- candidate for hammerstone framework
 local function findItemsByKey(searchTable, keyToFind)
 	local results = {}
@@ -74,6 +80,11 @@ end
 function cheat:getResourceByName(objectName)
 	return findItemsByKey(resource.types, objectName)
 end
+
+--- ****************************************************************
+--- END Rae's changes
+--- ****************************************************************
+
 
 function cheat:setClientState(clientState)
 	cheat.clientState = clientState
