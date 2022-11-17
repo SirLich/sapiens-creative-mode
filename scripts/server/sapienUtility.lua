@@ -10,7 +10,14 @@ function sapienUtility:maxSapienNeeds(objects)
     
 	mj:log("got to custom needs function in sapienUtility", objects)
 		for i,sapienID in ipairs(objects) do
-			local sapien = serverGOM:getObjectWithID(sapienID)
+			-- if the sapien is in motion / walking somewhere, the data structure of the object changes
+			local sapienUniqueID = sapienID.uniqueID
+			local sapien = nil
+			if sapienUniqueID then
+				sapien = serverGOM:getObjectWithID(sapienUniqueID)
+			else
+				sapien = serverGOM:getObjectWithID(sapienID)
+			end
 			--mj:log("sapien found ", sapien)
 			if sapien then
 				local sharedState = sapien.sharedState
