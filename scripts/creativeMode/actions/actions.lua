@@ -3,19 +3,20 @@
 
 local actions = {}
 
--- Sapiens 
+--- Sapiens 
 local gameObject = mjrequire "common/gameObject"
 local flora = mjrequire "common/flora"
 local logicInterface = mjrequire "mainThread/logicInterface"
 local logger = mjrequire "hammerstone/logging"
--- Math
+local gameState = mjrequire "hammerstone/state/gameState"
+--- Math
 local mjm = mjrequire "common/mjm"
 local vec3 = mjm.vec3
 local vec2 = mjm.vec2
 
--- ==========================================================================================
--- deleteAction
--- ==========================================================================================
+--- ==========================================================================================
+--- deleteAction
+--- ==========================================================================================
 
 local deleteAction = {
 	iconModelName = 'icon_cancel_thic'
@@ -52,16 +53,25 @@ function deleteAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lo
 end
 
 function deleteAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
+	local tribeID =  gameState.world:getTribeID()
 	for i,element in ipairs(multiSelectAllObjects) do
-		logicInterface:callServerFunction("removeGameObject", element.uniqueID)
+		--- ****************************************************************
+		--- @author death-rae "Rae"
+		--- if the object is a sapien, we want to use a different method
+		if gameObject.types[baseObjectInfo.objectTypeIndex].key == 'sapien' then
+			logicInterface:callServerFunction("removeSapienObject", {element, tribeID, true, nil})
+		else
+			logicInterface:callServerFunction("removeGameObject", {element, tribeID})
+		end
+		--- ****************************************************************
 	end
 end
 
 actions.deleteAction = deleteAction
 
--- ==========================================================================================
--- Print Action
--- ==========================================================================================
+--- ==========================================================================================
+--- Print Action
+--- ==========================================================================================
 
 local printAction = {
 	iconModelName = 'icon_craft',
@@ -80,9 +90,9 @@ end
 
 actions.printAction = printAction
 
--- ==========================================================================================
--- Force Grow Actions
--- ==========================================================================================
+--- ==========================================================================================
+--- Force Grow Actions
+--- ==========================================================================================
 
 local forceGrowAction = {
 	iconModelName = 'icon_plant',
@@ -94,9 +104,11 @@ function forceGrowAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects,
 end
 
 function forceGrowAction:onClick(object, multiSelectAllObjects, lookAtPos)
-	--- @author Rae
+	--- ****************************************************************
+	--- @author death-rae "Rae"
 	--- updated this to call the new function in server.lua
 	logicInterface:callServerFunction("growPlant", multiSelectAllObjects)
+	--- ****************************************************************
 end
 
 actions.forceGrowAction = forceGrowAction
@@ -104,7 +116,7 @@ actions.forceGrowAction = forceGrowAction
 
 
 --- ****************************************************************
---- @author Rae
+--- @author death-rae "Rae"
 --- added a force replenish action to spawn harvestables on an object
 --- ****************************************************************
 

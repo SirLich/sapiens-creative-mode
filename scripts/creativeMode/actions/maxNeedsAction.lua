@@ -29,7 +29,7 @@ function maxNeedsAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, 
 	return not isTerrain and gameObject.types[baseObjectInfo.objectTypeIndex].key == 'sapien'
 end
 --- ****************************************************************
---- @author Rae
+--- @author death-rae "Rae"
 --- updated this onClick method to call a new function in server, which then calls the custom sapienUtility.lua file.
 --- ****************************************************************
 function maxNeedsAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)

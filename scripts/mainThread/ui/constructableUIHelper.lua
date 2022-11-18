@@ -31,7 +31,7 @@ function mod:onload(constructableUIHelper)
 		return isUIUnlocked() or super_checkHasSeenRequiredTools(self, constructableType, missingTools)
 	end
 --- ****************************************************************
--- author @Rae
+-- @author death-rae "Rae"
 
 	-- Shadow checkHasRequiredDiscoveries
 	-- this removes the need to unlock skills for unlocking the build UI
