@@ -1,3 +1,7 @@
+--- CreativeMode: sapienUtility.lua
+--- @author death-rae "Rae"
+
+
 local gameObject = mjrequire "common/gameObject"
 local need = mjrequire "common/need"
 local mood = mjrequire "common/mood"
