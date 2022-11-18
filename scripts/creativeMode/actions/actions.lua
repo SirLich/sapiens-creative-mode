@@ -53,17 +53,28 @@ function deleteAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lo
 end
 
 function deleteAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
-	local tribeID =  gameState.world:getTribeID()
 	for i,element in ipairs(multiSelectAllObjects) do
-		--- ****************************************************************
-		--- @author death-rae "Rae"
-		--- if the object is a sapien, we want to use a different method
-		if gameObject.types[baseObjectInfo.objectTypeIndex].key == 'sapien' then
-			logicInterface:callServerFunction("removeSapienObject", {element, tribeID, true, nil})
+		local type = gameObject.types[baseObjectInfo.objectTypeIndex]
+		local mobIndex = type.mobTypeIndex
+		if type and type.key == 'sapien' then
+			local follower = element.follower
+			if follower then
+				logger:log("removing sapien")
+				logicInterface:callServerFunction("removeSapienObject", element)
+			else
+				logger:log("removing nomad")
+				logicInterface:callServerFunction("removeGameObject", element.uniqueID)
+			end
+		elseif mobIndex then
+			logger:log("removing mob")
+			logger:log(element)
+			logicInterface:callServerFunction("removeGameObject", element.uniqueID)
 		else
-			logicInterface:callServerFunction("removeGameObject", {element, tribeID})
+			logger:log("removing object: ")
+			logger:log(element)
+			logicInterface:callServerFunction("removeGameObject", element.uniqueID)
 		end
-		--- ****************************************************************
+
 	end
 end
 

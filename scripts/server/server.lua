@@ -18,26 +18,10 @@ local function unlockSkill(clientID, paramTable)
 	mod.serverWorld:completeDiscoveryForTribe(paramTable.tribeID, paramTable.skillTypeIndex)
 end
 
-local function removeGameObject(clientID, paramTable)
+local function removeGameObject(clientID, objectID)
 	--- paramTable Required because net-functions can only pass one argument
 
 	local serverGOM = mjrequire "server/serverGOM"
-	--- ****************************************************************
-	--- @author death-rae "Rae"
-	--- take the object out of any plans before we remove it.
-	--- @param paramTable.object - The object to change
-	--- @param paramTable.tribeID string - The tribe your Sapiens belong to
-
-	local planManager = mjrequire "server/planManager"
-	local serverMob = mjrequire "server/objects/serverMob"
-	local object = paramTable.element
-	local objectID = object.uniqueID
-	planManager:removeAllPlanStatesForObject(object, object.sharedState)
-	-- this drops the inventory of the object, and should be okay even if the object is not a mob.
-	serverMob:dropAllEmbededObjects(object, paramTable.tribeID)	
-	--- end Rae's changes
-	--- ****************************************************************
-
 	serverGOM:removeGameObject(objectID)
 end
 
@@ -63,6 +47,8 @@ end
 --- replenishPlant: replenishes the harvestables on the selected plants. Called by actions.lua forceReplenishtAction:onClick
 --- removeSapienObject: if we're trying to remove a sapein, we use a different method to handle the inventory aspect.
 --- ****************************************************************
+
+
 local function maxNeeds(clientID, objects)
 	local sapienUtility = mjrequire "server/sapienUtility"
 	sapienUtility:maxSapienNeeds(objects)
@@ -84,19 +70,12 @@ local function replenishPlant(clientID, plants)
 	end
 end
 
-local function removeSapienObject(clientID, paramTable)
-	--- since sapiens have an inventory we want to use a different method to remove them
-	--- @param paramTable.object - The object to change
-	--- @param paramTable.tribeID - the tribe the sapien belongs to
+local function removeSapienObject(clientID, object)
+	local serverSapien = mjrequire "server/serverSapien"
+	--- remove the sapien, do not notify the client, and drop the inventory
+	mj:log(object)
+	serverSapien:removeSapien(object, false, true)
 
-	local serverGOM = mjrequire "server/serverGOM"
-	local planManager = mjrequire "server/planManager"
-	local object = paramTable.element
-	local objectID = object.uniqueID
-	--- take the object out of any plans, before we remove it.
-	planManager:removeAllPlanStatesForObject(object, object.sharedState)
-	--- object to drop, tribe to drop it from, add orders to store inventory, plan order index or nil.
-	serverGOM:removeGameObjectAndDropInventory(objectID, paramTable.tribeID, true, nil)
 end
 --- ****************************************************************
 --- END Rae's changes
