@@ -70,13 +70,24 @@ local function replenishPlant(clientID, plants)
 	end
 end
 
-local function removeSapienObject(clientID, object)
-	local serverSapien = mjrequire "server/serverSapien"
+local function removeSapiens(clientID, paramTable)
+	--- @param paramTable.tribeID string - The tribe the sapiens belong to
+	--- @param paramTable.objects object - The sapien objects to remove
+	local sapienUtility = mjrequire "server/sapienUtility"
 	--- remove the sapien, do not notify the client, and drop the inventory
-	mj:log(object)
-	serverSapien:removeSapien(object, false, true)
-
+	--mj:log("remove sapiens param", paramTable)
+	sapienUtility:removeSapiens(paramTable.objects, paramTable.tribeID)
+	--serverSapien:removeSapien(object, false, true)
 end
+
+local function removeMobs(clientID, paramTable)	
+	--- @param paramTable.tribeID string - The tribe the sapiens belong to
+	--- @param paramTable.objects object - The mob objects to remove
+	--mj:log("calling mob utility class", paramTable)
+	local mobUtility = mjrequire "server/mobUtility"
+	mobUtility:removeMobs(paramTable.objects, paramTable.tribeID)
+end
+
 --- ****************************************************************
 --- END Rae's changes
 --- ****************************************************************
@@ -96,7 +107,8 @@ local function init()
 	mod.server:registerNetFunction("maxNeeds", maxNeeds)
 	mod.server:registerNetFunction("growPlant",growPlant)
 	mod.server:registerNetFunction("replenishPlant", replenishPlant)
-	mod.server:registerNetFunction("removeSapienObject", removeSapienObject)
+	mod.server:registerNetFunction("removeSapiens", removeSapiens)
+	mod.server:registerNetFunction("removeMobs",removeMobs)
 	--- END Rae's changes
 end
 
