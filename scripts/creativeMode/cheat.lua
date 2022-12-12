@@ -26,7 +26,7 @@ local logger = mjrequire "hammerstone/logging"
 local saveState = mjrequire "hammerstone/state/saveState"
 
 --- ****************************************************************
---- author @Rae
+--- @author death-rae "Rae"
 --- added functions to list all resources, and to find a resource by name (partial match, not case senstive)
 --- also includes two helper functions, that maybe should live in hammerstone framework util rather than here...
 --- ****************************************************************
