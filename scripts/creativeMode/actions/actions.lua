@@ -7,7 +7,7 @@ local actions = {}
 local gameObject = mjrequire "common/gameObject"
 local flora = mjrequire "common/flora"
 local logicInterface = mjrequire "mainThread/logicInterface"
-
+local logger = mjrequire "hammerstone/logging"
 -- Math
 local mjm = mjrequire "common/mjm"
 local vec3 = mjm.vec3
@@ -94,30 +94,44 @@ function forceGrowAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects,
 end
 
 function forceGrowAction:onClick(object, multiSelectAllObjects, lookAtPos)
-
-	for i,element in ipairs(multiSelectAllObjects) do
-		local prevObjectTypeIndex = element.objectTypeIndex
-		local gameObjectType = gameObject.types[element.objectTypeIndex]
-		local floraInfo = flora.types[gameObjectType.floraTypeIndex]
-		local saplingGameObjectTypeKey = floraInfo.saplingGameObjectTypeKey
-		local saplingGameObjectTypeIndex = gameObject.types[saplingGameObjectTypeKey].index
-	
-		local saplingObjectTypeIndex = element.objectTypeIndex
-		local gameObjectType = gameObject.types[saplingObjectTypeIndex]
-	
-		if gameObjectType.floraTypeIndex then
-			local floraInfo = flora.types[gameObjectType.floraTypeIndex]
-			local newTypeIndex = floraInfo.gameObjectTypeIndex
-			if newTypeIndex ~= saplingObjectTypeIndex then
-				logicInterface:callServerFunction("changeGameObject", {
-					objectID = element.uniqueID,
-					newTypeIndex = newTypeIndex
-				})
-			end
-		end
-	end
+	--- @author Rae
+	--- updated this to call the new function in server.lua
+	logicInterface:callServerFunction("growPlant", multiSelectAllObjects)
 end
 
 actions.forceGrowAction = forceGrowAction
+
+
+
+--- ****************************************************************
+--- @author Rae
+--- added a force replenish action to spawn harvestables on an object
+--- ****************************************************************
+
+-- ==========================================================================================
+-- Force Harvest / Replenish Actions
+-- ==========================================================================================
+
+local forceReplenishtAction = {
+	iconModelName = 'icon_plant',
+	name = 'Instantly Replenish'
+}
+
+function forceReplenishtAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
+	return not isTerrain and baseObjectInfo.sharedState and gameObject.types[baseObjectInfo.objectTypeIndex].floraTypeIndex
+	--baseObjectInfo.sharedState.mature
+end
+
+function forceReplenishtAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos)
+		logger:log("replenishing harvest")
+		logicInterface:callServerFunction("replenishPlant", multiSelectAllObjects)
+
+end
+
+actions.forceReplenishtAction = forceReplenishtAction
+--- ****************************************************************
+--- END Rae's changes
+--- ****************************************************************
+
 
 return actions
