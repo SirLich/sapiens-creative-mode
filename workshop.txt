@@ -1,25 +1,41 @@
-**Creative Mode in Sapiens**
+# Creative Mode in Sapiens
 
 ⭐This mod requires you to also install the Hammerstone Modding Framework.
 
- 📓 Join the Community: https://discord.gg/WnN8hj2Fyg
+  - 📓 Join the Community: https://discord.gg/WnN8hj2Fyg
+  - 📓 Source Code: https://github.com/SirLich/sapiens-creative-mode
+[hr][/hr] 
+
+# Features
 
 Sapiens Creative Mode enables you to build creatively in your sapiens world. Here is a list of the current features: 
- - Ability to instantly dig/fill holes
- - Ability to instantly complete and remove buildings
+ - Instantly dig/fill holes
+ - Instantly build stuff, including selecting wood/stone/resource type
+ - Instantly place decorations
+ - Ability to remove anything from the world, including placed decorations, trees, etc
  - Ability to unlock all skills for all sapiens in your tripe
- - Ability to unlock the building UI, even if you haven't seen or discovered the items
+ - Ability to unlock the building UI, even if you haven't seen or discovered the items!
+ - Ability to force-grow plants, and replenish their fruit/sticks
+ - Ability to keep your sapiens happy
 
-Additionally, there is a good cheat UI, build around the lua console. Commands include:
+# Command Console
+
+Additionally, there is a good cheat console, built around the base lua console. You can access this by doing 'ctrl+c' then '/lua'.
+
+From there, you can type in 'cheat' commands, to various effects:
+
+Commands include:
  - cheat:Spawn(...) 
- - cheat:SetSunrise(...)
+ - cheat:Locate(...)
+ - cheat:UnlockSkill(...)
+ - cheat:UnlockAllSkills()
+ - cheat:SetSunrise()
+ - cheat:SetDay()
+ - cheat:SetNight()
 
-The CreativeMode mod also adds a "Max Needs" button to Sapiens, to keep them topped up on health and happiness. 
-
-🐛**Known Bugs**
+# 🐛Known Bugs
 
 The mod is very early-alpha. Please be patient. 
 
-Essentially, there is some issues with state-management, meaning the UI boxes often show the wrong values, and you need to restart after setting them. 
-
-So make your selection, restart the game, and then re-enable instant-building (if needed). This should allow you to use Creative Mode.
+ - UI is still lacking a lot of polish
+ - No ability to set fill type when digging

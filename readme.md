@@ -36,11 +36,12 @@ Creative Mode pre-release, launched in a half-finished state during the first we
  - UI was buggy and didn't cache state
  - Could only build with one material
  - Instant Build Mode couldn't be toggled off
+ 
 ## 1.0.0
 
 The first true release of Creative Mode, which stabilized all known bugs, and reworked many core features for a true, creative experience.
 
-## Features
+### Features
  - You can now select the resources that you would like to build with
  - The 'build' menu is now properly unlocked with the 'Unlock UI checkbox'
  - Added 'Remove' button, allowing you to delete objects such as decorations, mammoths, or trees
@@ -48,8 +49,18 @@ The first true release of Creative Mode, which stabilized all known bugs, and re
  - Custom UI now properly restores state when reloading world
  - 'Make x Happy' button now allows multi-selection, among graphical improvements
 
-## Limitations
+### Limitations
  - UI is still lacking a lot of polish
  - No ability to set fill type when digging
  - Cannot set plants to auto-complete (must use the button on the seed mound)
  - Deleting mammoths can sometimes crash the game (often)
+
+## 1.1.0
+
+Thanks to 'Rae', first time contributor for authoring this update.
+
+### Features
+ - Fixed issue where removing mammoths (among other entities) crashed the game
+ - Fixed bug where removing sapien caused a ghost-icon to persist until reload
+ - Fixed issue where 'Max Needs' button instead set Sapiens health and happiness to zero
+ - Added ability to 'Replenish' crops

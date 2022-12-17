@@ -1,5 +1,5 @@
 --- CreativeMode: actions.lua
---- @author SirLich
+--- @author SirLich, death-rae
 
 local actions = {}
 
@@ -79,7 +79,7 @@ end
 actions.deleteAction = deleteAction
 
 --- ==========================================================================================
---- Print Action
+--- Print Action -- You can enable this for debugging.
 --- ==========================================================================================
 
 local printAction = {
@@ -88,7 +88,7 @@ local printAction = {
 }
 
 function printAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
-	return false
+	return false 
 end
 
 function printAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
@@ -113,21 +113,11 @@ function forceGrowAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects,
 end
 
 function forceGrowAction:onClick(object, multiSelectAllObjects, lookAtPos)
-	--- ****************************************************************
-	--- @author death-rae "Rae"
-	--- updated this to call the new function in server.lua
-	logicInterface:callServerFunction("growPlant", multiSelectAllObjects)
-	--- ****************************************************************
+	logicInterface:callServerFunction("growPlants", multiSelectAllObjects)
 end
 
 actions.forceGrowAction = forceGrowAction
 
-
-
---- ****************************************************************
---- @author death-rae "Rae"
---- added a force replenish action to spawn harvestables on an object
---- ****************************************************************
 
 -- ==========================================================================================
 -- Force Harvest / Replenish Actions
@@ -140,19 +130,12 @@ local forceReplenishtAction = {
 
 function forceReplenishtAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
 	return not isTerrain and baseObjectInfo.sharedState and gameObject.types[baseObjectInfo.objectTypeIndex].floraTypeIndex
-	--baseObjectInfo.sharedState.mature
 end
 
 function forceReplenishtAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos)
-		logger:log("replenishing harvest")
-		logicInterface:callServerFunction("replenishPlant", multiSelectAllObjects)
-
+	logicInterface:callServerFunction("replenishPlants", multiSelectAllObjects)
 end
 
 actions.forceReplenishtAction = forceReplenishtAction
---- ****************************************************************
---- END Rae's changes
---- ****************************************************************
-
 
 return actions

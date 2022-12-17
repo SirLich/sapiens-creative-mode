@@ -1,5 +1,5 @@
 --- CreativeMode: maxNeedsAction.lua
---- @author SirLich
+--- @author SirLich, death-rae
 
 local maxNeedsAction = {
 	iconModelName = 'icon_happy'
@@ -28,16 +28,10 @@ end
 function maxNeedsAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
 	return not isTerrain and gameObject.types[baseObjectInfo.objectTypeIndex].key == 'sapien'
 end
---- ****************************************************************
---- @author death-rae "Rae"
---- updated this onClick method to call a new function in server, which then calls the custom sapienUtility.lua file.
---- ****************************************************************
+
 function maxNeedsAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
-	logicInterface:callServerFunction("maxNeeds",multiSelectAllObjects)
+	logicInterface:callServerFunction("setMaxNeeds", multiSelectAllObjects)
 end
---- ****************************************************************
---- END Rae's changes
---- ****************************************************************
 
 
 return maxNeedsAction

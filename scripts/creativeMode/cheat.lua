@@ -1,7 +1,7 @@
 --- CreativeMode: cheat.lua
 --- Globally namespaced cheat commands
 --- Made available via requiring in creativeMode.lua
---- @author SirLich
+--- @author SirLich, death-rae
 
 cheat = {
 	clientState = nil,
@@ -26,7 +26,7 @@ local logger = mjrequire "hammerstone/logging"
 local saveState = mjrequire "hammerstone/state/saveState"
 
 --- ****************************************************************
---- @author death-rae "Rae"
+--- @author  "Rae"
 --- added functions to list all resources, and to find a resource by name (partial match, not case senstive)
 --- also includes two helper functions, that maybe should live in hammerstone framework util rather than here...
 --- ****************************************************************
@@ -57,9 +57,11 @@ local function findItemsByKey(searchTable, keyToFind)
 
 end
 
--- candidate for hammerstone framework
+--- Converts a table into a CSV string.
+-- @param table - The table to convety. Must have a 'name' and a 'key' field.
+-- @author death-rae
+-- @todo This function could be migrated into Hammerstone
 local function tableToCsvString(table)
-	--assumes the table will have a key field and a name field.
 	local csvString = ""
 	for i,item in ipairs(table) do
 		csvString = csvString .. item.key .. "," .. item.name
@@ -67,8 +69,6 @@ local function tableToCsvString(table)
 			csvString = csvString .. "\n"
 		end
 	end
-	logger:log("returning csvString")
-	logger:log(csvString)
 	return csvString
 end
 
@@ -81,14 +81,17 @@ function cheat:getResourceByName(objectName)
 	return findItemsByKey(resource.types, objectName)
 end
 
---- ****************************************************************
---- END Rae's changes
---- ****************************************************************
-
 
 function cheat:setClientState(clientState)
 	cheat.clientState = clientState
 end
+
+--- Snaps the player character to the closest instance of the named GOM.
+-- This is useful for locating hard-to-find resources.
+-- @param objectName - The name of the object you want to locate, such as 'mammoth'
+-- @param distance - The distance in meters to search. Defaults to 2500.
+-- @return nil
+-- @todo This is currently locating the *first* instance. I don't know whether this is the closest.
 
 function cheat:Locate(objectName, distance)
 	local localPlayer = mjrequire "mainThread/localPlayer"
@@ -112,23 +115,21 @@ function cheat:Locate(objectName, distance)
 	}
 
 	logicInterface:callLogicThreadFunction("getGameObjectsOfTypesWithinRadiusOfPos", requestInfo, function(objects)
-		for i, info in ipairs(objects) do
-			logicInterface:callLogicThreadFunction("retrieveObject", info.uniqueID, function(retrievedObjectResponse) 
-				 localPlayer:followObject(retrievedObjectResponse, false, retrievedObjectResponse.pos)
+		if #objects > 1 then
+			logicInterface:callLogicThreadFunction("retrieveObject", objects[1].uniqueID, function(retrievedObjectResponse)
+				localPlayer:followObject(retrievedObjectResponse, false, retrievedObjectResponse.pos)
 			end)
-
-			-- TODO: This is dumb.
-			return
+			return nil
 		end
+		mj:log("Could not locate ", objectName, ", since it was not found.")
 	end)
 
-	mj:log("Could not locate ", objectName, ", since it was not found.")
 end
 
+--- Unlocks a skill by name
+-- @param skillName - The name of the skill to unlock (see skill.lua)
+-- @return nil
 function cheat:UnlockSkill(skillName)
-	--- Unlocks a skill by name
-	-- @param skillName The name of the skill to unlock (see skill.lua)
-	-- @return nil
 
 	local skillTypeIndex = typeMaps:keyToIndex(skillName, skill.validTypes)
 	local tribeID = gameState.world:getTribeID()
@@ -143,10 +144,9 @@ function cheat:UnlockSkill(skillName)
 	logicInterface:callServerFunction("unlockSkill", paramTable)
 end
 
+--- Unlocks all skills (see skill.lua)
+-- @return nil
 function cheat:UnlockAllSkills()
-	--- Unlocks all skills (see skill.lua)
-	-- @return nil
-
 	logger:log("Unlocking all skills:")
 	for _, v in ipairs(skill.validTypes) do
 		cheat:UnlockSkill(v.key)
@@ -154,10 +154,10 @@ function cheat:UnlockAllSkills()
 
 end
 
+--- Spawns an entity by name
+-- @param objectName - The name of the entity or object to spawn. e.g. "chicken"
+-- @return nil
 function cheat:Spawn(objectName, count)
-	--- Spawns an entity by name
-	-- @param objectName The name of the entity or object to spawn. e.g. "chicken"
-	-- @return nil
 	local gameObject = mjrequire "common/gameObject"
 	local type = gameObject.types[objectName]
 	if type == nil then
@@ -170,64 +170,60 @@ function cheat:Spawn(objectName, count)
 	end
 
 	for i=1, count do
+		-- This is a global function defined in Sapiens core.
 		spawn(objectName)
 	end
 end
 
+--- Toggles instant built mode, which allows placing structures and completing them instantly.
+--- @param newValue - If true, instant build will be turned on. If false, it will be turned off.
+--- @return nil
 function cheat:SetInstantBuild(newValue)
-	--- Disables Instant build mode. Requires restart!
-	--- @param newValue boolean The new value of the instant build flag.
-	--- @return nil
-
 	saveState:setValue('cm.instantBuild', newValue)
 	logicInterface:callServerFunction("setInstantBuild", newValue)
 end
 
+--- Enables instant build mode, which allows digging/filling instantly.
+--- @param newValue boolean - If true, instant dig will be turned on. If false, it will be turned off.
+--- @return nil
 function cheat:SetInstantDig(newValue)
-	--- Enables instant build
-	--- @param newValue boolean The new value of the instant dig flag.
-	--- @return nil
-
 	saveState:setValue('cm.instantDig', newValue)
 end
 
+--- Unlocks the UI, allowing you to place or interact with resources that you haven't discovered/unlocked yet.
+--- @param newValue boolean - The new value of the UI unlocked flag.
+--- @return nil
 function cheat:SetUIUnlocked(newValue)
-	--- Unlocks the UI (when building)
-	--- @param newValue boolean The new value of the UI unlocked flag.
-	--- @return nil
-
 	saveState:setValue('cm.uiUnlocked', newValue)
 	
+	-- Refresh the UI to prevent stuff from being stale.
 	pathUI:update()
 	buildUI:update()
 	placeUI:update()
 	plantUI:update()
 end
 
+--- Sets the time to sunrise.
+--- @return nil
 function cheat:SetSunrise()
-	--- Sets the time to sunrise.
-	--- @return nil
 	setSunrise(0)
 end
 
+--- Sets the time to day.
+--- @return nil
 function cheat:SetDay()
-	--- Sets the time to day.
-	--- @return nil
-
 	setSunrise(500)
 end
 
+--- Sets the time to sunset.
+--- @return nil
 function cheat:SetSunset()
-	--- Sets the time to sunset.
-	--- @return nil
-
 	setSunrise(1000)
 end
 
+--- Sets the time to night.
+--- @return nil
 function cheat:SetNight()
-	--- Sets the time to night.
-	--- @return nil
-
 	setSunrise(2000)
 end
 

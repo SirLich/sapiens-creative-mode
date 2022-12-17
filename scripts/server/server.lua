@@ -1,5 +1,5 @@
 --- CreativeMode: server.lua
---- @author SirLich
+--- @author SirLich, death-rae
 
 local mod = {
 	loadOrder = 1,
@@ -9,8 +9,9 @@ local mod = {
 	serverWorld = nil,
 	server = nil
 }
-local mj = mjrequire "common/mj"
 
+-- Sapiens
+local mj = mjrequire "common/mj"
 
 
 local function unlockSkill(clientID, paramTable)
@@ -25,15 +26,11 @@ local function removeGameObject(clientID, objectID)
 	serverGOM:removeGameObject(objectID)
 end
 
-
-
-
+--- Changes the type of an in-game object, from the client.
+--- @param paramTable.objectID string - The object to change
+--- @param paramTable.newTypeIndex string - The type index to change to
+--- @param paramTable.keepDegradeInfo bool - Used on some objects to indicate how many uses remain (i.e. weapons & tools)
 local function changeGameObject(clientID, paramTable)
-	--- Changes the type of an in-game object, from the client.
-	--- @param paramTable.objectID string - The object to change
-	--- @param paramTable.newTypeIndex string - The type index to change to
-	--- @param paramTable.keepDegradeInfo bool - Used on some objects to indicate how many uses remain (i.e. weapons & tools)
-
 	local serverGOM = mjrequire "server/serverGOM"
 	serverGOM:changeObjectType(paramTable.objectID, paramTable.newTypeIndex, paramTable.keepDegradeInfo)
 end
@@ -49,50 +46,48 @@ end
 --- ****************************************************************
 
 
-local function maxNeeds(clientID, objects)
+--- Allows setting the 'maximum needs' (happiness, loyalty) for a table of sapiens.
+local function setMaxNeeds(clientID, objects)
 	local sapienUtility = mjrequire "server/sapienUtility"
 	sapienUtility:maxSapienNeeds(objects)
 end
 
 
-local function growPlant(clientID, plants)
+--- Allows to force-grow a table of saplings.
+-- @param plants table - The plants to replenish
+local function growPlants(clientID, plants)
 	local serverFlora = mjrequire "server/objects/serverFlora"
 	for i,element in ipairs(plants) do
 		serverFlora:growSaplingCheat(element)
 	end
-
 end
 
-local function replenishPlant(clientID, plants)
+--- Allows to replinish the inventory of a plant, such as refilling sticks or fruit.
+-- @param paramTable.tribeID string - The tribe the sapiens belong to
+-- @param paramTable.plants object - The plants to replenish
+local function replenishPlants(clientID, plants)
 	local serverFlora = mjrequire "server/objects/serverFlora"
 	for i, element in ipairs(plants) do
 		serverFlora:refillInventory(element, element.sharedState, true, true)
 	end
 end
 
+--- Allows for removing a table of sapiens.
+-- @param paramTable.tribeID string - The tribe the sapiens belong to
+-- @param paramTable.objects object - The sapien objects to remove
 local function removeSapiens(clientID, paramTable)
-	--- @param paramTable.tribeID string - The tribe the sapiens belong to
-	--- @param paramTable.objects object - The sapien objects to remove
 	local sapienUtility = mjrequire "server/sapienUtility"
 	--- remove the sapien, do not notify the client, and drop the inventory
-	--mj:log("remove sapiens param", paramTable)
 	sapienUtility:removeSapiens(paramTable.objects, paramTable.tribeID)
-	--serverSapien:removeSapien(object, false, true)
 end
 
+--- Allows for removing a table of mobs, such as mammoths.
+-- @param paramTable.tribeID string - The tribe the sapiens belong to
+-- @param paramTable.objects object - The mob objects to remove
 local function removeMobs(clientID, paramTable)	
-	--- @param paramTable.tribeID string - The tribe the sapiens belong to
-	--- @param paramTable.objects object - The mob objects to remove
-	--mj:log("calling mob utility class", paramTable)
 	local mobUtility = mjrequire "server/mobUtility"
 	mobUtility:removeMobs(paramTable.objects, paramTable.tribeID)
 end
-
---- ****************************************************************
---- END Rae's changes
---- ****************************************************************
-
-
 
 local function init()
 	--- Register net function for cheats
@@ -103,10 +98,10 @@ local function init()
 		mod.serverWorld.completionCheatEnabled = param
 	end)
 
-	--- register Rae's functions
-	mod.server:registerNetFunction("maxNeeds", maxNeeds)
-	mod.server:registerNetFunction("growPlant",growPlant)
-	mod.server:registerNetFunction("replenishPlant", replenishPlant)
+	--- register Rae's functionsf
+	mod.server:registerNetFunction("setMaxNeeds", setMaxNeeds)
+	mod.server:registerNetFunction("growPlants",growPlants)
+	mod.server:registerNetFunction("replenishPlants", replenishPlants)
 	mod.server:registerNetFunction("removeSapiens", removeSapiens)
 	mod.server:registerNetFunction("removeMobs",removeMobs)
 	--- END Rae's changes
