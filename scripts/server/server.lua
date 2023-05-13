@@ -16,7 +16,7 @@ local mj = mjrequire "common/mj"
 
 local function unlockSkill(clientID, paramTable)
 	--- paramTable Required because net-functions can only pass one argument
-	mod.serverWorld:completeDiscoveryForTribe(paramTable.tribeID, paramTable.skillTypeIndex)
+	mod.serverWorld:completeDiscoveryForTribe(paramTable.tribeID, paramTable.researchTypeIndex)
 end
 
 local function removeGameObject(clientID, objectID)
@@ -42,7 +42,7 @@ end
 --- growPlant: an update to forceGrow. Rather than replicating logic from growSapling, just call the growSaplingCheat method. Called by actions.lua forceGrowAction:onClick.
 --- note the old instant grow method did not remove the mature timer, so harvestables never grew. 
 --- replenishPlant: replenishes the harvestables on the selected plants. Called by actions.lua forceReplenishtAction:onClick
---- removeSapienObject: if we're trying to remove a sapein, we use a different method to handle the inventory aspect.
+--- removeSapienObject: if we're trying to remove a sapien, we use a different method to handle the inventory aspect.
 --- ****************************************************************
 
 
