@@ -57,8 +57,22 @@ end
 -- @param plants table - The plants to replenish
 local function growPlants(clientID, plants)
 	local serverFlora = mjrequire "server/objects/serverFlora"
-	for i, element in ipairs(plants) do
-		serverFlora:growSaplingCheat(element)
+	local serverGOM = mjrequire "server/serverGOM"
+	local gameObject = mjrequire "common/gameObject"
+
+	for i,plant in ipairs(plants) do
+		local objectID = plant.uniqueID
+
+		--serverGOM:removeGameObject(objectID)
+		local object = serverGOM:getObjectWithID(objectID)
+		if object then
+			local objectType = gameObject.types[object.objectTypeIndex]
+			if objectType.floraTypeIndex then
+				serverFlora:growSaplingCheat(object)
+				serverFlora:refillInventory(object, object.sharedState, true, true)
+				serverGOM:saveObject(object.uniqueID)
+			end
+		end
 	end
 end
 
@@ -67,8 +81,21 @@ end
 -- @param paramTable.plants object - The plants to replenish
 local function replenishPlants(clientID, plants)
 	local serverFlora = mjrequire "server/objects/serverFlora"
-	for i, element in ipairs(plants) do
-		serverFlora:refillInventory(element, element.sharedState, true, true)
+	local serverGOM = mjrequire "server/serverGOM"
+	local gameObject = mjrequire "common/gameObject"
+
+	for i,plant in ipairs(plants) do
+		local objectID = plant.uniqueID
+
+		--serverGOM:removeGameObject(objectID)
+		local object = serverGOM:getObjectWithID(objectID)
+		if object then
+			local objectType = gameObject.types[object.objectTypeIndex]
+			if objectType.floraTypeIndex then
+				serverFlora:refillInventory(object, object.sharedState, true, true)
+				serverGOM:saveObject(object.uniqueID)
+			end
+		end
 	end
 end
 
@@ -97,14 +124,11 @@ local function init()
 	mod.server:registerNetFunction("setInstantBuild", function(clientID, param)
 		mod.serverWorld.completionCheatEnabled = param
 	end)
-
-	--- register Rae's functionsf
 	mod.server:registerNetFunction("setMaxNeeds", setMaxNeeds)
 	mod.server:registerNetFunction("growPlants",growPlants)
 	mod.server:registerNetFunction("replenishPlants", replenishPlants)
 	mod.server:registerNetFunction("removeSapiens", removeSapiens)
 	mod.server:registerNetFunction("removeMobs",removeMobs)
-	--- END Rae's changes
 end
 
 function mod:onload(server)

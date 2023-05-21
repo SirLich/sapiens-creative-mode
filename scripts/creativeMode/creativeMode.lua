@@ -16,7 +16,7 @@ local saveState = mjrequire "hammerstone/state/saveState"
 local settingsUI = mjrequire "creativeMode/settingsUI"
 
 -- Creative Mode
-local cheat = mjrequire "creativeMode/cheat" -- Not really used, but we need to import so the global is exposed.
+local c = mjrequire "creativeMode/cheat" -- Not really used, but we need to import so the global is exposed.
 local maxNeedsAction = mjrequire "creativeMode/actions/maxNeedsAction"
 local actions = mjrequire "creativeMode/actions/actions"
 

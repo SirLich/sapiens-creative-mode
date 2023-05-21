@@ -93,8 +93,7 @@ end
 -- @param distance - The distance in meters to search. Defaults to 2500.
 -- @return nil
 -- @todo This is currently locating the *first* instance. I don't know whether this is the closest.
-
-function cheat:Locate(objectName, distance)
+function cheat:locate(objectName, distance)
 	local localPlayer = mjrequire "mainThread/localPlayer"
 	local gameObject = mjrequire "common/gameObject"
 
@@ -130,7 +129,7 @@ end
 --- Unlocks a skill by name
 -- @param skillName - The name of the skill to unlock (see skill.lua)
 -- @return nil
-function cheat:UnlockSkill(researchTypeIndex, skillName)
+function cheat:unlockSkill(researchTypeIndex, skillName)
 	local tribeID = gameState.world:getTribeID()
 
 	logger:log("Unlocking Skill: " .. skillName .. " (" .. researchTypeIndex .. ")" .. " for tribe: " .. tribeID)
@@ -145,11 +144,11 @@ end
 
 --- Unlocks all skills (see skill.lua)
 -- @return nil
-function cheat:UnlockAllSkills()
+function cheat:unlockAllSkills()
 	logger:log("Unlocking all skills:")
 	for k, v in pairs(research.types) do
 		if not tonumber(k) then
-			cheat:UnlockSkill(v.index, k)
+			cheat:unlockSkill(v.index, k)
 		end
 	end
 
@@ -158,7 +157,7 @@ end
 --- Spawns an entity by name
 -- @param objectName - The name of the entity or object to spawn. e.g. "chicken"
 -- @return nil
-function cheat:Spawn(objectName, count)
+function cheat:spawn(objectName, count)
 	local gameObject = mjrequire "common/gameObject"
 	local type = gameObject.types[objectName]
 	if type == nil then
@@ -179,7 +178,7 @@ end
 --- Toggles instant built mode, which allows placing structures and completing them instantly.
 --- @param newValue - If true, instant build will be turned on. If false, it will be turned off.
 --- @return nil
-function cheat:SetInstantBuild(newValue)
+function cheat:setInstantBuild(newValue)
 	saveState:setValue('cm.instantBuild', newValue)
 	logicInterface:callServerFunction("setInstantBuild", newValue)
 end
@@ -187,14 +186,14 @@ end
 --- Enables instant build mode, which allows digging/filling instantly.
 --- @param newValue boolean - If true, instant dig will be turned on. If false, it will be turned off.
 --- @return nil
-function cheat:SetInstantDig(newValue)
+function cheat:setInstantDig(newValue)
 	saveState:setValue('cm.instantDig', newValue)
 end
 
 --- Unlocks the UI, allowing you to place or interact with resources that you haven't discovered/unlocked yet.
 --- @param newValue boolean - The new value of the UI unlocked flag.
 --- @return nil
-function cheat:SetUIUnlocked(newValue)
+function cheat:setUIUnlocked(newValue)
 	saveState:setValue('cm.uiUnlocked', newValue)
 	
 	-- Refresh the UI to prevent stuff from being stale.
@@ -228,4 +227,5 @@ function cheat:SetNight()
 	setSunrise(2000)
 end
 
+local c = cheat
 return cheat

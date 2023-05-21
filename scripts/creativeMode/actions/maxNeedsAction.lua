@@ -15,6 +15,13 @@ local mjm = mjrequire "common/mjm"
 local vec3 = mjm.vec3
 local vec2 = mjm.vec2
 
+-- Hammerstone
+local saveState = mjrequire "hammerstone/state/saveState"
+
+local function showActions()
+	return saveState:getValue('cm.showActionButtons')
+end
+
 function maxNeedsAction:getName(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
 	local name = baseObjectInfo.sharedState.name
 
@@ -26,7 +33,7 @@ function maxNeedsAction:getName(baseObjectInfo, multiSelectAllObjects, lookAtPos
 end
 
 function maxNeedsAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
-	return not isTerrain and gameObject.types[baseObjectInfo.objectTypeIndex].key == 'sapien'
+	return showActions() and not isTerrain and gameObject.types[baseObjectInfo.objectTypeIndex].key == 'sapien'
 end
 
 function maxNeedsAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)

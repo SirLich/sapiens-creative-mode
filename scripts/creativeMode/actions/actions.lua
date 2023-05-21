@@ -14,6 +14,9 @@ local mjm = mjrequire "common/mjm"
 local vec3 = mjm.vec3
 local vec2 = mjm.vec2
 
+-- Hammerstone
+local saveState = mjrequire "hammerstone/state/saveState"
+
 --- ==========================================================================================
 --- deleteAction
 --- ==========================================================================================
@@ -48,8 +51,12 @@ function deleteAction:getName(baseObjectInfo, multiSelectAllObjects, lookAtPos)
 	end
 end
 
+local function showActions()
+	return saveState:getValue('cm.showActionButtons')
+end
+
 function deleteAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
-	return not isTerrain
+	return showActions() and not isTerrain
 end
 
 function deleteAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
@@ -109,7 +116,7 @@ local planAction = {
 }
 
 function planAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
-	return true
+	return showActions() and true
 end
 
 function planAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
@@ -127,7 +134,7 @@ local forceGrowAction = {
 }
 
 function forceGrowAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
-	return not isTerrain and baseObjectInfo.sharedState and baseObjectInfo.sharedState.matureTime
+	return showActions() and not isTerrain and baseObjectInfo.sharedState and baseObjectInfo.sharedState.matureTime
 end
 
 function forceGrowAction:onClick(object, multiSelectAllObjects, lookAtPos)
@@ -147,7 +154,7 @@ local forceReplenishtAction = {
 }
 
 function forceReplenishtAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
-	return not isTerrain and baseObjectInfo.sharedState and gameObject.types[baseObjectInfo.objectTypeIndex].floraTypeIndex
+	return showActions() and not isTerrain and baseObjectInfo.sharedState and gameObject.types[baseObjectInfo.objectTypeIndex].floraTypeIndex
 end
 
 function forceReplenishtAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos)

@@ -29,7 +29,7 @@ Creative Mode pre-release, launched in a half-finished state during the first we
 
 ### Features
  - A 'Creative Mode' UI where you could toggle on building, digging, and ui toggles, as well as unlock all skills
- - 'Simply' instant building, which just built with a single preset resource type
+ - 'Simple' instant building, which just built with a single preset resource type
  - A selection of 'cheat' commands, exposed via the sapiens `/lua` console
 
 ### Limitations
@@ -64,3 +64,19 @@ Thanks to 'Rae', first time contributor for authoring this update.
  - Fixed bug where removing sapien caused a ghost-icon to persist until reload
  - Fixed issue where 'Max Needs' button instead set Sapiens health and happiness to zero
  - Added ability to 'Replenish' crops
+
+### Limitations (caused by 0.4.6)
+ - Replenish crops crashes game
+ - 'Unlock all Skills' crashed the game
+ - 'Grow Crop' crashes the game
+
+## 1.2.0
+
+Thanks to 'Smart-Alec', first time contributor.
+
+### Features
+ - Fixes crash when clicking 'unlock all skills'
+ - Fixed crash when clicking 'instant grow'
+ - Fixed crash when clicking 'replenish'
+ - 
+
