@@ -13,6 +13,7 @@ local mj = mjrequire "common/mj"
 local logicInterface = mjrequire "mainThread/logicInterface"
 local typeMaps = mjrequire "common/typeMaps"
 local skill = mjrequire "common/skill"
+local research = mjrequire "common/research"
 local resource = mjrequire "common/resource"
 
 local buildUI = mjrequire "mainThread/ui/manageUI/buildUI"
@@ -129,16 +130,14 @@ end
 --- Unlocks a skill by name
 -- @param skillName - The name of the skill to unlock (see skill.lua)
 -- @return nil
-function cheat:UnlockSkill(skillName)
-
-	local skillTypeIndex = typeMaps:keyToIndex(skillName, skill.validTypes)
+function cheat:UnlockSkill(researchTypeIndex, skillName)
 	local tribeID = gameState.world:getTribeID()
 
-	logger:log("Unlocking Skill: " .. skillName .. " (" .. skillTypeIndex .. ")" .. " for tribe: " .. tribeID)
+	logger:log("Unlocking Skill: " .. skillName .. " (" .. researchTypeIndex .. ")" .. " for tribe: " .. tribeID)
 
 	local paramTable = {
 		tribeID = tribeID,
-		skillTypeIndex = skillTypeIndex
+		researchTypeIndex = researchTypeIndex
 	}
 
 	logicInterface:callServerFunction("unlockSkill", paramTable)
@@ -148,8 +147,10 @@ end
 -- @return nil
 function cheat:UnlockAllSkills()
 	logger:log("Unlocking all skills:")
-	for _, v in ipairs(skill.validTypes) do
-		cheat:UnlockSkill(v.key)
+	for k, v in pairs(research.types) do
+		if not tonumber(k) then
+			cheat:UnlockSkill(v.index, k)
+		end
 	end
 
 end
