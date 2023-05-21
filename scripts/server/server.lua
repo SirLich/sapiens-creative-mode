@@ -57,7 +57,7 @@ end
 -- @param plants table - The plants to replenish
 local function growPlants(clientID, plants)
 	local serverFlora = mjrequire "server/objects/serverFlora"
-	for i,element in ipairs(plants) do
+	for i, element in ipairs(plants) do
 		serverFlora:growSaplingCheat(element)
 	end
 end

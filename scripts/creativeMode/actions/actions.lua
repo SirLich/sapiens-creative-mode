@@ -100,6 +100,24 @@ end
 actions.printAction = printAction
 
 --- ==========================================================================================
+--- Print Action -- You can enable this for debugging.
+--- ==========================================================================================
+
+local planAction = {
+	iconModelName = 'icon_craft',
+	name = 'Queue Test Plan'
+}
+
+function planAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
+	return true
+end
+
+function planAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
+end
+
+-- actions.planAction = planAction
+
+--- ==========================================================================================
 --- Force Grow Actions
 --- ==========================================================================================
 
