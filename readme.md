@@ -78,5 +78,7 @@ Thanks to 'Smart-Alec', first time contributor.
  - Fixes crash when clicking 'unlock all skills'
  - Fixed crash when clicking 'instant grow'
  - Fixed crash when clicking 'replenish'
- - 
+ - Redo main menu to help people understand the mod
+ - Renamed some functions in the cheat menu to better match lua style guidelines
+ - Added a new toggle checkbox to hide the action-buttons if desired.
 
