@@ -39,3 +39,4 @@ The mod is very early-alpha. Please be patient.
 
  - UI is still lacking a lot of polish
  - No ability to set fill type when digging
+ - Game Crashes When Using "Instant Grow"
