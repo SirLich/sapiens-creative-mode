@@ -34,7 +34,65 @@ local function isInstantBuild(tribeID)
 	})
 end
 
+-- Mostly stolen from serverGOM.lua
+local function calculateFillOrderResources(fillConstructableTypeIndex, restrictedResourceObjectTypesOrNil)
+	mj:log("Here...")
+	local resourceModule = mjrequire "common/resource"
+	local constructable = mjrequire "common/constructable"
+	local gameObjectModule = mjrequire "common/gameObject"
+	local planManagerModule = mjrequire "server/planManager"
 
+	local constructableType = constructable.types[fillConstructableTypeIndex]
+
+	local resourceIndex = constructableType.requiredResources[1].type
+
+	local function isValidResourceIndex(index)
+		--- Tests whether an index is valid (could be sorted out, due to the currentRestrictedResources!)
+		if restrictedResourceObjectTypesOrNil ~= nil then
+
+			for resourceIndex, isDisabled in pairs(restrictedResourceObjectTypesOrNil) do
+				if resourceIndex == index then
+					return not isDisabled
+				end
+			end
+		end
+
+		-- Default codepath, assume valid
+		return true
+	end
+
+	local function getGameObjectsByResourceIndex(resourceTypeIndex)
+		--- Searches through the  game object list, and finds game objects matching the resource index
+		--- Example: Finds all 'branches' (peach, pine, etc) based on the request for 'branch'
+		--- Actual args and returns are ints, represnting type map shit
+
+		local resourceIndexes = {}
+
+		for i,object in ipairs(gameObjectModule.validTypes) do
+			if object.resourceTypeIndex == resourceTypeIndex then
+				table.insert(resourceIndexes, object.index)
+			end
+		end
+
+		return resourceIndexes
+	end
+
+	local potentialResources = getGameObjectsByResourceIndex(resourceIndex)
+			
+	local indexToUse = nil
+	for i,potentialIndex in ipairs(potentialResources) do
+		if isValidResourceIndex(potentialIndex) then
+			indexToUse = potentialIndex
+			break
+		end
+	end
+	
+	local objectTypeCounts = {
+		[indexToUse] = 100
+	}
+
+	return objectTypeCounts
+end
 
 -- local planInfo = {
 -- 	planTypeIndex = constructableType.planTypeIndex or plan.types.build.index,
@@ -111,10 +169,9 @@ function mod:onload(planManager)
 		if isInstantDig(tribeID) and vertIDs and vertIDs[1] then
 			-- Filling
 			if planTypeIndex == plan.types.fill.index then
+				local objectTypeCounts = calculateFillOrderResources(fillConstructableTypeIndex, restrictedResourceObjectTypesOrNil)
+				
 				for i, vertID in ipairs(vertIDs) do
-
-					local objectTypeCounts = {}
-					objectTypeCounts[fillConstructableTypeIndex] = 100
 
 					-- local constructableType = constructable.types[fillConstructableTypeIndex]
 					serverTerrain:fillVertex(vertID, objectTypeCounts, tribeID)
