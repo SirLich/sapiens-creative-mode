@@ -35,6 +35,18 @@ local function changeGameObject(clientID, paramTable)
 	serverGOM:changeObjectType(paramTable.objectID, paramTable.newTypeIndex, paramTable.keepDegradeInfo)
 end
 
+local function startStorm(clientID)
+	local serverWeather = mjrequire "server/serverWeather"
+	serverWeather:startSevereWeatherEvent()
+	serverWeather:updateWeatherAndSendInfoToAllClients()
+end
+
+local function stopStorm(clientID)
+	local serverWeather = mjrequire "server/serverWeather"
+	serverWeather:stopWindstorm()
+	serverWeather:updateWeatherAndSendInfoToAllClients()
+end
+
 --- ****************************************************************
 --- @author death-rae "Rae"
 --- created local functions for maxNeeds, growPlant, and replenishPlant
@@ -121,6 +133,8 @@ local function init()
 	mod.server:registerNetFunction("unlockSkill", unlockSkill)
 	mod.server:registerNetFunction("removeGameObject", removeGameObject)
 	mod.server:registerNetFunction("changeGameObject", changeGameObject)
+	mod.server:registerNetFunction("startStorm", startStorm)
+	mod.server:registerNetFunction("stopStorm", stopStorm)
 	mod.server:registerNetFunction("setInstantBuild", function(clientID, param)
 		mod.serverWorld.completionCheatEnabled = param
 	end)

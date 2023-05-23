@@ -82,3 +82,8 @@ Thanks to 'Smart-Alec', first time contributor.
  - Renamed some functions in the cheat menu to better match lua style guidelines
  - Added a new toggle checkbox to hide the action-buttons if desired.
 
+# 1.2.1
+
+ - Fixed crash when clicking 'unlock all skills'
+ - Add 'Stop Storm' and 'Start Storm' functionality, accessible with buttons, or with console.
+

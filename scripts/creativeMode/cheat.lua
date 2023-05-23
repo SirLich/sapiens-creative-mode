@@ -151,8 +151,9 @@ function cheat:unlockAllSkills()
 			cheat:unlockSkill(v.index, k)
 		end
 	end
-
 end
+
+
 
 --- Spawns an entity by name
 -- @param objectName - The name of the entity or object to spawn. e.g. "chicken"
@@ -181,6 +182,16 @@ end
 function cheat:setInstantBuild(newValue)
 	saveState:setValue('cm.instantBuild', newValue)
 	logicInterface:callServerFunction("setInstantBuild", newValue)
+end
+
+-- startSevereWeatherEvent
+function cheat:startStorm()
+	logicInterface:callServerFunction("startStorm")
+end
+
+-- startSevereWeatherEvent
+function cheat:stopStorm()
+	logicInterface:callServerFunction("stopStorm")
 end
 
 --- Enables instant build mode, which allows digging/filling instantly.
