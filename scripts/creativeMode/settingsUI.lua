@@ -149,7 +149,7 @@ function settingsUI:init(manageUI)
 	textView.font = Font(uiCommon.fontName, 16)
 	textView.relativePosition = ViewPosition(MJPositionCenter, MJPositionTop)
 	textView.baseOffset = vec3( -250, elementYOffset - 4, 0)
-	textView.text = "Welcome to Creative Mode!\n\nThis mod allows you to play sapiens 'creativly' by cheating in\nresources, or toggling the cheats on the right.\n\nYou can access the console like this:\n  - ctrl+c to open the chat window\n  - /lua\n\nCommands:\n  - spawn(gameObject, count)\n  - setSunrise(timeOffset)\n  - cheat:locate(objectName, distance)\n  - cheat:unlockSkill(researchTypeIndex, skillName)\n  - cheat:unlockAllSkills()\n  - cheat:setUIUnlocked(newValue)\n  - cheat:setInstantDig(newValue)\n  - cheat:setInstantBuild(newValue)"
+	textView.text = "Welcome to Creative Mode!\n\nThis mod allows you to play sapiens 'creatively' by cheating in\nresources, or toggling the cheats on the right.\n\nYou can access the console like this:\n  - ctrl+c to open the chat window\n  - /lua\n\nCommands:\n  - spawn(gameObject, count)\n  - setSunrise(timeOffset)\n  - cheat:locate(objectName, distance)\n  - cheat:unlockSkill(researchTypeIndex, skillName)\n  - cheat:unlockAllSkills()\n  - cheat:setUIUnlocked(newValue)\n  - cheat:setInstantDig(newValue)\n  - cheat:setInstantBuild(newValue)"
 
 	local leftView = View.new(self.view)
 	leftView.relativePosition = ViewPosition(MJPositionInnerLeft, MJPositionTop)
@@ -197,6 +197,10 @@ function settingsUI:init(manageUI)
 
 	addButton(leftView, "Stop Storm", function()
 		cheat:stopStorm()
+	end)
+
+	addButton(leftView, "Quick Resources", function()
+		cheat:quickResources()
 	end)
 
 	requireRestartTextView= TextView.new(leftView)

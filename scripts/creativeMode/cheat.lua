@@ -194,6 +194,14 @@ function cheat:stopStorm()
 	logicInterface:callServerFunction("stopStorm")
 end
 
+function cheat:quickResources()
+	spawn("birchBranch", 20)
+	spawn("chickenMeatCooked", 15)
+	spawn("flintHatchet", 1)
+	spawn("flintPickaxe", 1)
+	spawn("flintHammer", 1)
+end
+
 --- Enables instant build mode, which allows digging/filling instantly.
 --- @param newValue boolean - If true, instant dig will be turned on. If false, it will be turned off.
 --- @return nil
