@@ -2,9 +2,12 @@
 --- Only really around to shadow some UI stuff, and make them exposed.
 --- @author SirLich
 
-local mod = {
+local worldModule = {
 	loadOrder = 1
 }
+
+-- Hammerstone
+local shadow = mjrequire "hammerstone/utils/shadow"
 
 -- TODO: This could be combined with the function in constructableUIHelper.lua
 local function isUIUnlocked()
@@ -16,16 +19,14 @@ local function isUIUnlocked()
 	return isUnlocked
 end
 
-function mod:onload(world)
-	local super_tribeHasSeenResource = world.tribeHasSeenResource
-	world.tribeHasSeenResource = function(self, resourceTypeIndex)
-		return isUIUnlocked() or super_tribeHasSeenResource(self, resourceTypeIndex)
-	end
-
-	local super_tribeHasSeenResourceObjectTypeIndex = world.tribeHasSeenResourceObjectTypeIndex
-	world.tribeHasSeenResourceObjectTypeIndex = function(self, resourceTypeIndex)
-		return isUIUnlocked() or super_tribeHasSeenResourceObjectTypeIndex(self, resourceTypeIndex)
-	end
+--- @shadow
+function worldModule:tribeHasSeenResource(super, resourceTypeIndex)
+	return isUIUnlocked() or super(self, resourceTypeIndex)
 end
 
-return mod
+--- @shadow
+function worldModule:tribeHasSeenResourceObjectTypeIndex(super, resourceTypeIndex)
+	return isUIUnlocked() or super(self, resourceTypeIndex)
+end
+
+return shadow:shadow(worldModule)

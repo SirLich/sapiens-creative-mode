@@ -11,8 +11,6 @@ cheat = {
 -- Sapiens
 local mj = mjrequire "common/mj"
 local logicInterface = mjrequire "mainThread/logicInterface"
-local typeMaps = mjrequire "common/typeMaps"
-local skill = mjrequire "common/skill"
 local research = mjrequire "common/research"
 local resource = mjrequire "common/resource"
 

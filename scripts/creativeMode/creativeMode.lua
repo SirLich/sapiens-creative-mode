@@ -7,12 +7,8 @@ local creativeMode = {
     clientState = nil
 }
 
--- Sapiens
-local timer = mjrequire "common/timer"
-
 -- Hammerstone
 local uiManager = mjrequire "hammerstone/ui/uiManager"
-local saveState = mjrequire "hammerstone/state/saveState"
 local settingsUI = mjrequire "creativeMode/settingsUI"
 
 -- Creative Mode

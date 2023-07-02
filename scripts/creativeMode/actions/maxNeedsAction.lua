@@ -7,16 +7,11 @@ local maxNeedsAction = {
 
 -- Sapiens 
 local gameObject = mjrequire "common/gameObject"
-local logger = mjrequire "hammerstone/logging"
 local logicInterface = mjrequire "mainThread/logicInterface"
-
--- Math
-local mjm = mjrequire "common/mjm"
-local vec3 = mjm.vec3
-local vec2 = mjm.vec2
 
 -- Hammerstone
 local saveState = mjrequire "hammerstone/state/saveState"
+
 
 local function showActions()
 	return saveState:getValue('cm.showActionButtons')

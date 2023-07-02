@@ -41,22 +41,6 @@ local elementYOffset = elementYOffsetStart
 local yOffsetBetweenElements = buttonHeight
 local elementTitleX = - backgroundWidth * 0.5 - 10
 
-local requireRestartTextView
-
-local function setRequireRestart(needsRestart)
-	requireRestartTextView.hidden = false
-
-	if needsRestart then
-		requireRestartTextView.color = vec4(1.0, 0.0, 0.0, 1.0)
-		requireRestartTextView.font = Font(uiCommon.fontName, 2)
-		requireRestartTextView.text = "[Settings Applied] Restart Required!"
-	else
-		requireRestartTextView.color = vec4(1.0, 1.0, 1.0, 0.3)
-		requireRestartTextView.font = Font(uiCommon.fontName, 15)
-		requireRestartTextView.text = "[Settings Applied] No need to restart :)"
-	end
-end
-
 -- ============================================================================
 -- Copied from optionsView.lua
 -- ============================================================================
@@ -202,13 +186,6 @@ function settingsUI:init(manageUI)
 	addButton(leftView, "Quick Resources", function()
 		cheat:quickResources()
 	end)
-
-	requireRestartTextView= TextView.new(leftView)
-	requireRestartTextView.relativePosition = ViewPosition(MJPositionCenter, MJPositionBelow)
-	requireRestartTextView.baseOffset = vec3(0, 100, 0)
-	requireRestartTextView.color = vec4(1.0, 0.0, 0.0, 1.0)
-	requireRestartTextView.font = Font(uiCommon.fontName, 50)
-	requireRestartTextView.hidden = true
 end
 
 -- Called every frame

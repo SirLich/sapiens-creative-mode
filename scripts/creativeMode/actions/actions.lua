@@ -5,14 +5,8 @@ local actions = {}
 
 --- Sapiens 
 local gameObject = mjrequire "common/gameObject"
-local flora = mjrequire "common/flora"
 local logicInterface = mjrequire "mainThread/logicInterface"
-local logger = mjrequire "hammerstone/logging"
 local gameState = mjrequire "hammerstone/state/gameState"
---- Math
-local mjm = mjrequire "common/mjm"
-local vec3 = mjm.vec3
-local vec2 = mjm.vec2
 
 -- Hammerstone
 local saveState = mjrequire "hammerstone/state/saveState"
@@ -69,15 +63,11 @@ function deleteAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, 
 		tribeID = tribeID
 	}
 	if type and type.key == 'sapien' then
-		--logger:log("removing sapien")
 		logicInterface:callServerFunction("removeSapiens", paramTable)
 	elseif mobIndex then
-		--logger:log("removing mob")
 		logicInterface:callServerFunction("removeMobs", paramTable)
 	else
 		for i,element in ipairs(multiSelectAllObjects) do
-			--logger:log("removing object: ")
-			--logger:log(element)
 			logicInterface:callServerFunction("removeGameObject", element.uniqueID)
 		end
 	end
@@ -86,7 +76,7 @@ end
 actions.deleteAction = deleteAction
 
 --- ==========================================================================================
---- Send Notification Action
+--- Send Notification Action - DISAbLED
 --- ==========================================================================================
 
 local notificationAction = {
@@ -95,7 +85,7 @@ local notificationAction = {
 }
 
 function notificationAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
-	return showActions() and true
+	return showActions() and false
 end
 
 function notificationAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
@@ -112,7 +102,7 @@ end
 actions.notificationAction = notificationAction
 
 --- ==========================================================================================
---- Print Action -- You can enable this for debugging.
+--- Print Action -- DISAbLED
 --- ==========================================================================================
 
 local planAction = {

@@ -87,3 +87,7 @@ Thanks to 'Smart-Alec', first time contributor.
  - Fixed crash when clicking 'unlock all skills'
  - Add 'Stop Storm' and 'Start Storm' functionality, accessible with buttons, or with console.
  - Add ability to set fill type properly when using 'instant dig' mode.
+
+# 1.2.2
+
+- TODO: Fix issue with the creative move building

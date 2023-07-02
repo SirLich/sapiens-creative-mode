@@ -1,7 +1,7 @@
 --- CreativeMode: planManager.lua
 --- @author SirLich
 
-local mod = {
+local planManagerModule = {
 	loadOrder = 1,
 
 	-- Local State
@@ -12,15 +12,14 @@ local mod = {
 -- Sapiens
 local serverTerrain = mjrequire "server/serverTerrain"
 local plan = mjrequire "common/plan"
+local shadow = mjrequire "hammerstone/utils/shadow"
 
 -- Hammerstone
 local saveState = mjrequire "hammerstone/state/saveState"
 
+--- @param tribeID string: The ID of the tribe that you are testing for.
+--- @return boolean: True if the instant build mode is toggled on for the world.
 local function isInstantDig(tribeID)
-	--- @param tribeID string: The ID of the tribe that you are testing for.
-	--- @return boolean: True if the instant build mode is toggled on for the world.
-		
-
 	return saveState:getValue('cm.instantDig', {
 		tribeID = tribeID,
 		default = false
@@ -36,11 +35,8 @@ end
 
 -- Mostly stolen from serverGOM.lua
 local function calculateFillOrderResources(fillConstructableTypeIndex, restrictedResourceObjectTypesOrNil)
-	mj:log("Here...")
-	local resourceModule = mjrequire "common/resource"
 	local constructable = mjrequire "common/constructable"
 	local gameObjectModule = mjrequire "common/gameObject"
-	local planManagerModule = mjrequire "server/planManager"
 
 	local constructableType = constructable.types[fillConstructableTypeIndex]
 
@@ -105,101 +101,60 @@ end
 -- 	noBuildOrder = noBuildOrderModifierDown,
 -- }
 
-function mod:onload(planManager)
-	local super_init = planManager.init
-	planManager.init = function(self, serverGOM, serverWorld, serverSapien, serverCraftArea)
-		super_init(self, serverGOM, serverWorld, serverSapien, serverCraftArea)
-
-		mod.serverGOM = serverGOM
-		mod.serverWorld = serverWorld
-	end
-
-	local super_addBuildOrPlantPlan = planManager.addBuildOrPlantPlan
-	planManager.addBuildOrPlantPlan = function(self, tribeID,
-		planTypeIndex, 
-		constructableTypeIndex, 
-		pos, 
-		rotation, 
-		sapienIDOrNil, 
-		subModelInfosOrNil, 
-		attachedToTerrain,
-		decalBlockersOrNil,
-		restrictedResourceObjectTypesOrNil,
-		restrictedToolObjectTypesOrNil,
-		noBuildOrder)
-
-		mj:log("Setting Restricted Resources: ", restrictedResourceObjectTypesOrNil)
-		planManager.currentRestrictedResources = restrictedResourceObjectTypesOrNil
+---  @shadow
+function planManagerModule:init(super, serverGOM, serverWorld, serverSapien, serverCraftArea)
+	super(self, serverGOM, serverWorld, serverSapien, serverCraftArea)
+	planManagerModule.serverGOM = serverGOM
+	planManagerModule.serverWorld = serverWorld
+end
 
 
-		if isInstantBuild(tribeID) then
-			super_addBuildOrPlantPlan(self, tribeID,
-			planTypeIndex, 
-			constructableTypeIndex,
-			pos, 
-			rotation, 
-			sapienIDOrNil, 
-			subModelInfosOrNil, 
-			attachedToTerrain,
-			decalBlockersOrNil,
-			restrictedResourceObjectTypesOrNil,
-			restrictedToolObjectTypesOrNil,
-			noBuildOrder)
-		else
-			super_addBuildOrPlantPlan(self, tribeID,
-			planTypeIndex, 
-			constructableTypeIndex, 
-			pos, 
-			rotation, 
-			sapienIDOrNil, 
-			subModelInfosOrNil, 
-			attachedToTerrain,
-			decalBlockersOrNil,
-			restrictedResourceObjectTypesOrNil,
-			restrictedToolObjectTypesOrNil,
-			noBuildOrder)
-		end
+--- @shadow
+function planManagerModule:addBuildOrPlantPlan(super,tribeID,planTypeIndex, constructableTypeIndex, pos, rotation, sapienIDOrNil, subModelInfosOrNil, attachedToTerrain,decalBlockersOrNil,restrictedResourceObjectTypesOrNil,restrictedToolObjectTypesOrNil,noBuildOrder)
 
-	end
+	mj:log("Setting Restricted Resources: ", restrictedResourceObjectTypesOrNil)
+	self.currentRestrictedResources = restrictedResourceObjectTypesOrNil
 
-	local super_addTerrainModificationPlan = planManager.addTerrainModificationPlan
-	planManager.addTerrainModificationPlan = function(self, tribeID, planTypeIndex, vertIDs, fillConstructableTypeIndex, researchTypeIndex, restrictedResourceObjectTypesOrNil, restrictedToolObjectTypesOrNil, planOrderIndexOrNil)
-		-- Custom implementation if instant build mode is on. Otherwise, just call the super.
-		-- The extra validation is so we don't crash.
-		if isInstantDig(tribeID) and vertIDs and vertIDs[1] then
-			-- Filling
-			if planTypeIndex == plan.types.fill.index then
-				local objectTypeCounts = calculateFillOrderResources(fillConstructableTypeIndex, restrictedResourceObjectTypesOrNil)
-				
-				for i, vertID in ipairs(vertIDs) do
+	super(self, tribeID,planTypeIndex, constructableTypeIndex,pos, rotation, sapienIDOrNil, subModelInfosOrNil, attachedToTerrain,decalBlockersOrNil,restrictedResourceObjectTypesOrNil,restrictedToolObjectTypesOrNil,noBuildOrder)
+end
 
-					-- local constructableType = constructable.types[fillConstructableTypeIndex]
-					serverTerrain:fillVertex(vertID, objectTypeCounts, tribeID)
-				end
+--- @shadow
+function planManagerModule:addTerrainModificationPlan(super, tribeID, planTypeIndex, vertIDs, fillConstructableTypeIndex, researchTypeIndex, restrictedResourceObjectTypesOrNil, restrictedToolObjectTypesOrNil, planOrderIndexOrNil)
+	-- Custom implementation if instant build mode is on. Otherwise, just call the super.
+	-- The extra validation is so we don't crash.
+	if isInstantDig(tribeID) and vertIDs and vertIDs[1] then
+		-- Filling
+		if planTypeIndex == plan.types.fill.index then
+			local objectTypeCounts = calculateFillOrderResources(fillConstructableTypeIndex, restrictedResourceObjectTypesOrNil)
+			
+			for i, vertID in ipairs(vertIDs) do
 
-			-- Digging
-			elseif planTypeIndex == plan.types.dig.index or
-				planTypeIndex == plan.types.mine.index then
-
-				for i, vertID in ipairs(vertIDs) do
-					serverTerrain:digVertex(vertID, tribeID)
-				end
-
-			-- Clearing
-			elseif planTypeIndex == plan.types.clear.index then
-				for i, vertID in ipairs(vertIDs) do
-					serverTerrain:removeVegetationForVertex(vertID)
-					serverTerrain:removeSnowForVertex(vertID)
-				end
-
-			-- Unknown
-			else
-				super_addTerrainModificationPlan(self, tribeID, planTypeIndex, vertIDs, fillConstructableTypeIndex, researchTypeIndex, restrictedResourceObjectTypesOrNil, restrictedToolObjectTypesOrNil, planOrderIndexOrNil)
+				-- local constructableType = constructable.types[fillConstructableTypeIndex]
+				serverTerrain:fillVertex(vertID, objectTypeCounts, tribeID)
 			end
+
+		-- Digging
+		elseif planTypeIndex == plan.types.dig.index or
+			planTypeIndex == plan.types.mine.index then
+
+			for i, vertID in ipairs(vertIDs) do
+				serverTerrain:digVertex(vertID, tribeID)
+			end
+
+		-- Clearing
+		elseif planTypeIndex == plan.types.clear.index then
+			for i, vertID in ipairs(vertIDs) do
+				serverTerrain:removeVegetationForVertex(vertID)
+				serverTerrain:removeSnowForVertex(vertID)
+			end
+
+		-- Unknown
 		else
-			super_addTerrainModificationPlan(self, tribeID, planTypeIndex, vertIDs, fillConstructableTypeIndex, researchTypeIndex, restrictedResourceObjectTypesOrNil, restrictedToolObjectTypesOrNil, planOrderIndexOrNil)
+			super(self, tribeID, planTypeIndex, vertIDs, fillConstructableTypeIndex, researchTypeIndex, restrictedResourceObjectTypesOrNil, restrictedToolObjectTypesOrNil, planOrderIndexOrNil)
 		end
+	else
+		super(self, tribeID, planTypeIndex, vertIDs, fillConstructableTypeIndex, researchTypeIndex, restrictedResourceObjectTypesOrNil, restrictedToolObjectTypesOrNil, planOrderIndexOrNil)
 	end
 end
 
-return mod
+return shadow:shadow(planManagerModule)
