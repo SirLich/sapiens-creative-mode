@@ -86,25 +86,30 @@ end
 actions.deleteAction = deleteAction
 
 --- ==========================================================================================
---- Print Action -- You can enable this for debugging.
+--- Send Notification Action
 --- ==========================================================================================
 
-local printAction = {
+local notificationAction = {
 	iconModelName = 'icon_craft',
-	name = 'Print Debug Information'
+	name = 'Send Test Notification'
 }
 
-function printAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
-	return false 
+function notificationAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
+	return showActions() and true
 end
 
-function printAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
+function notificationAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
+	local notificationsUI = mjrequire "mainThread/ui/notificationsUI"
+	local notification = mjrequire "common/notification"
 
-	mj:log("Base: ", baseObjectInfo)
-	mj:log("Multi: ", multiSelectAllObjects)
+	notificationsUI:displayObjectNotification({
+		typeIndex = notification.types.myNotification.index
+	})
+
+	notification:sendQuickNotification("Hello There!", baseObjectInfo, notification.colorTypes.veryBad)
 end
 
-actions.printAction = printAction
+actions.notificationAction = notificationAction
 
 --- ==========================================================================================
 --- Print Action -- You can enable this for debugging.
@@ -116,7 +121,7 @@ local planAction = {
 }
 
 function planAction:visibilityFilter(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)
-	return showActions() and true
+	return showActions() and false
 end
 
 function planAction:onClick(baseObjectInfo, multiSelectAllObjects, lookAtPos, isTerrain)

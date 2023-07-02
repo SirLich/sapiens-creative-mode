@@ -24,6 +24,14 @@ local actions = mjrequire "creativeMode/actions/actions"
 function creativeMode:init(clientState)
 	mj:log("Initializing CreativeMode Mod...")
 
+    local notification = mjrequire "common/notification"
+    notification:addNotificationType("myNotification", {
+        colorType = notification.colorTypes.veryBad,
+        titleFunction = function(data)
+            return "HELLO WORLD!"
+        end
+    })
+
     creativeMode.clientState = clientState
 
     uiManager:registerManageElement(settingsUI);
