@@ -19,6 +19,10 @@ local function unlockSkill(clientID, paramTable)
 	mod.serverWorld:completeDiscoveryForTribe(paramTable.tribeID, paramTable.researchTypeIndex)
 end
 
+local function discoverEverything(clientID, paramTable)
+	
+end
+
 local function removeGameObject(clientID, objectID)
 	--- paramTable Required because net-functions can only pass one argument
 
@@ -131,6 +135,7 @@ end
 local function init()
 	--- Register net function for cheats
 	mod.server:registerNetFunction("unlockSkill", unlockSkill)
+	mod.server:registerNetFunction("discoverEverything", discoverEverything)
 	mod.server:registerNetFunction("removeGameObject", removeGameObject)
 	mod.server:registerNetFunction("changeGameObject", changeGameObject)
 	mod.server:registerNetFunction("startStorm", startStorm)

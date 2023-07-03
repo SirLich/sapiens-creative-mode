@@ -174,6 +174,10 @@ function settingsUI:init(manageUI)
 	addButton(leftView, "Unlock All Skills", function()
 		cheat:unlockAllSkills()
 	end)
+
+	addButton(leftView, "Discover Everything", function()
+		cheat:discoverEverything()
+	end)
 	
 	addButton(leftView, "Start Storm", function()
 		cheat:startStorm()
@@ -186,6 +190,8 @@ function settingsUI:init(manageUI)
 	addButton(leftView, "Quick Resources", function()
 		cheat:quickResources()
 	end)
+
+
 end
 
 -- Called every frame

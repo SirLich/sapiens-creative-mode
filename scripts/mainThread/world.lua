@@ -29,4 +29,15 @@ function worldModule:tribeHasSeenResourceObjectTypeIndex(super, resourceTypeInde
 	return isUIUnlocked() or super(self, resourceTypeIndex)
 end
 
+--- @shadow
+function worldModule:tribeHasMadeDiscovery(super, researchTypeIndex)
+	return isUIUnlocked() or super(self, researchTypeIndex)
+
+end
+
+--- @shadow
+function worldModule:tribeHasDiscoveredCraftable(super, constructableTypeIndex)
+	return isUIUnlocked() or super(self, constructableTypeIndex)
+end
+
 return shadow:shadow(worldModule)

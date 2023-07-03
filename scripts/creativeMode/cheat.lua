@@ -151,6 +151,19 @@ function cheat:unlockAllSkills()
 	end
 end
 
+--- "Discovers" every resource and object, for the current tribe. This mostly replaces the 'Unlock UI', but is destructive.
+--- @return nil
+function cheat:discoverEverything()
+	local tribeID = gameState.world:getTribeID()
+
+	logger:log("Discovering Everything for tribe: " .. tribeID)
+
+	local paramTable = {
+		tribeID = tribeID,
+	}
+
+	logicInterface:callServerFunction("unlockSkill", paramTable)
+end
 
 
 --- Spawns an entity by name
