@@ -90,4 +90,4 @@ Thanks to 'Smart-Alec', first time contributor.
 
 # 1.2.2
 
-- TODO: Fix issue with the creative move building
+ - Fixed incompatibility with Hammerstone 1.6.0

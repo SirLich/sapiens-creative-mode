@@ -107,27 +107,27 @@ function settingsUI:init(manageUI)
 	--- @param manageUI UI The UI that is your parent.
 
 	-- Main View
-	self.view = View.new(manageUI.view)
+	self.view = View.new(manageUI)
 	self.view.size = backgroundSize
 	self.view.relativePosition = ViewPosition(MJPositionCenter, MJPositionCenter)
 	self.view.hidden = true
 
-	-- Background View
-	local backgroundView = ModelView.new(self.view )
-	backgroundView:setModel(model:modelIndexForName("ui_bg_lg_16x9"))
-	local scaleToUse = backgroundSize.x * 0.5
-	backgroundView.scale3D = vec3(scaleToUse,scaleToUse,scaleToUse)
-	backgroundView.relativePosition = ViewPosition(MJPositionCenter, MJPositionCenter)
-	backgroundView.size = backgroundSize
+	-- -- Background View
+	-- local backgroundView = ModelView.new(self.view )
+	-- backgroundView:setModel(model:modelIndexForName("ui_bg_lg_16x9"))
+	-- local scaleToUse = backgroundSize.x * 0.5
+	-- backgroundView.scale3D = vec3(scaleToUse,scaleToUse,scaleToUse)
+	-- backgroundView.relativePosition = ViewPosition(MJPositionCenter, MJPositionCenter)
+	-- backgroundView.size = backgroundSize
 
-	-- Close Button
-	local closeButton = uiStandardButton:create(backgroundView, vec2(50,50), uiStandardButton.types.markerLike)
-	closeButton.relativePosition = ViewPosition(MJPositionInnerRight, MJPositionAbove)
-	closeButton.baseOffset = vec3(30, -20, 0)
-	uiStandardButton:setIconModel(closeButton, "icon_cross")
-	uiStandardButton:setClickFunction(closeButton, function()
-		self.view.hidden = true
-	end)
+	-- -- Close Button
+	-- local closeButton = uiStandardButton:create(backgroundView, vec2(50,50), uiStandardButton.types.markerLike)
+	-- closeButton.relativePosition = ViewPosition(MJPositionInnerRight, MJPositionAbove)
+	-- closeButton.baseOffset = vec3(30, -20, 0)
+	-- uiStandardButton:setIconModel(closeButton, "icon_cross")
+	-- uiStandardButton:setClickFunction(closeButton, function()
+	-- 	self.view.hidden = true
+	-- end)
 
 	local textView = TextView.new(self.view)
 	textView.font = Font(uiCommon.fontName, 16)
