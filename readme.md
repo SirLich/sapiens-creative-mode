@@ -26,6 +26,7 @@ Enter the lua console `c` then `/lua`, and type one of the following commands:
 # 1.3.0
 
 - Added support for Sapiens 0.5
+- Fixes 'Discover Everything' button
 
 # 1.2.2
 
