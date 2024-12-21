@@ -4,7 +4,7 @@
 --- @author SirLich
 
 local creativeMode = {
-    clientState = nil
+	clientState = nil
 }
 
 -- Hammerstone
@@ -20,24 +20,16 @@ local actions = mjrequire "creativeMode/actions/actions"
 function creativeMode:init(clientState)
 	mj:log("Initializing CreativeMode Mod...")
 
-    local notification = mjrequire "common/notification"
-    notification:addNotificationType("myNotification", {
-        colorType = notification.colorTypes.veryBad,
-        titleFunction = function(data)
-            return "HELLO WORLD!"
-        end
-    })
+	creativeMode.clientState = clientState
 
-    creativeMode.clientState = clientState
+	uiManager:registerManageElement(settingsUI);
+	uiManager:registerActionElement(maxNeedsAction);
 
-    uiManager:registerManageElement(settingsUI);
-    uiManager:registerActionElement(maxNeedsAction);
+	for k, action in pairs(actions) do
+		uiManager:registerActionElement(action);
+	end
 
-    for k, action in pairs(actions) do
-        uiManager:registerActionElement(action);
-    end
-
-    cheat:setClientState(clientState)
+	cheat:setClientState(clientState)
 end
 
 return creativeMode

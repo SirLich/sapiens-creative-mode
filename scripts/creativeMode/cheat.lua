@@ -162,7 +162,7 @@ function cheat:discoverEverything()
 		tribeID = tribeID,
 	}
 
-	logicInterface:callServerFunction("unlockSkill", paramTable)
+	logicInterface:callServerFunction("discoverEverything", paramTable)
 end
 
 
